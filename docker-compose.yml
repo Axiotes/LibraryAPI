@@ -1,0 +1,31 @@
+services:
+  db:
+    image: mysql:8
+    container_name: mysql-library
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_library
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  api:
+    build: ./
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - app-network
+    volumes:
+      - .:/app
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql-data: {}
