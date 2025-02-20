@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reader } from './reader.entity';
 import { Repository } from 'typeorm';
@@ -36,5 +40,20 @@ export class ReaderService {
 
   public async findAll(): Promise<Reader[]> {
     return await this.readerRepository.find();
+  }
+
+  public async findBy<K extends keyof Reader>(
+    key: K,
+    value: Reader[K],
+  ): Promise<Reader> {
+    const reader = await this.readerRepository.findOne({
+      where: { [key]: value },
+    });
+
+    if (!reader) {
+      throw new NotFoundException(`Leitor não encontrado`);
+    }
+
+    return reader;
   }
 }
