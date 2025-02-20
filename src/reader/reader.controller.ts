@@ -4,11 +4,13 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
 } from '@nestjs/common';
 import { ReaderService } from './reader.service';
 import { ReaderDto } from './dtos/reader.dto';
 import { Reader } from './reader.entity';
+import { UpdateReaderDto } from './dtos/updateReader.dto';
 
 @Controller('api/v1/reader')
 export class ReaderController {
@@ -34,5 +36,13 @@ export class ReaderController {
   @Get('cpf/:cpf')
   public async findByCPF(@Param('cpf') cpf: string): Promise<Reader> {
     return this.readerService.findBy<'cpf'>('cpf', cpf);
+  }
+
+  @Patch(':id')
+  public async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: UpdateReaderDto,
+  ): Promise<Reader> {
+    return await this.readerService.update(id, body);
   }
 }

@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Reader } from './reader.entity';
 import { Repository } from 'typeorm';
 import { ReaderDto } from './dtos/reader.dto';
+import { UpdateReaderDto } from './dtos/updateReader.dto';
 
 @Injectable()
 export class ReaderService {
@@ -55,5 +56,34 @@ export class ReaderService {
     }
 
     return reader;
+  }
+
+  public async update(id: number, updateReaderDto: UpdateReaderDto): Promise<Reader> {
+    await this.findBy<'id'>('id', id);
+
+    if (
+      updateReaderDto.email &&
+      (await this.findBy<'email'>('email', updateReaderDto.email))
+    ) {
+      throw new ConflictException(
+        `O e-mail ${updateReaderDto.email} já está cadastrado.`,
+      );
+    }
+
+    if (
+      updateReaderDto.cpf &&
+      (await this.findBy<'cpf'>('cpf', updateReaderDto.cpf))
+    ) {
+      throw new ConflictException(
+        `O CPF ${updateReaderDto.cpf} já está cadastrado.`,
+      );
+    }
+
+    const updatedReader = await this.readerRepository.preload({
+      id,
+      ...updateReaderDto,
+    });
+
+    return await this.readerRepository.save(updatedReader);
   }
 }
