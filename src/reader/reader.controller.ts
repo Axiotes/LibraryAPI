@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ReaderService } from './reader.service';
 import { ReaderDto } from './dtos/reader.dto';
 import { Reader } from './reader.entity';
@@ -10,5 +10,10 @@ export class ReaderController {
   @Post()
   public async create(@Body() body: ReaderDto): Promise<Reader> {
     return await this.readerService.create(body);
+  }
+
+  @Get()
+  public async findAll(): Promise<Reader[]> {
+    return await this.readerService.findAll();
   }
 }

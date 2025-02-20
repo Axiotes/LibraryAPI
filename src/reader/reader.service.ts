@@ -33,4 +33,8 @@ export class ReaderService {
     const reader = await this.readerRepository.create(readerDto);
     return await this.readerRepository.save(reader);
   }
+
+  public async findAll(): Promise<Reader[]> {
+    return await this.readerRepository.find();
+  }
 }
