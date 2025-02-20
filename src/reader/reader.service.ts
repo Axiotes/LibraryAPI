@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -7,7 +8,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Reader } from './reader.entity';
 import { Repository } from 'typeorm';
 import { ReaderDto } from './dtos/reader.dto';
-import { UpdateReaderDto } from './dtos/updateReader.dto';
+import { UpdateReaderDto } from './dtos/update-reader.dto';
+import { FindReadersDto } from './dtos/find-readers.dto';
 
 @Injectable()
 export class ReaderService {
@@ -39,8 +41,19 @@ export class ReaderService {
     return await this.readerRepository.save(reader);
   }
 
-  public async findAll(): Promise<Reader[]> {
-    return await this.readerRepository.find();
+  public async findAll(query: FindReadersDto): Promise<Reader[]> {
+    if (query.skip && !query.limit) {
+      throw new BadRequestException(
+        'O parâmetro "limit" é obrigatório quando "skip" for utilizado.',
+      );
+    }
+
+    return await this.readerRepository
+      .createQueryBuilder('reader')
+      .skip(query.skip)
+      .take(query.limit)
+      .orderBy('reader.id', query.orderBy)
+      .getMany();
   }
 
   public async findBy<K extends keyof Reader>(

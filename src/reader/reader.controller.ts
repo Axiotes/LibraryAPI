@@ -6,11 +6,13 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ReaderService } from './reader.service';
 import { ReaderDto } from './dtos/reader.dto';
 import { Reader } from './reader.entity';
-import { UpdateReaderDto } from './dtos/updateReader.dto';
+import { UpdateReaderDto } from './dtos/update-reader.dto';
+import { FindReadersDto } from './dtos/find-readers.dto';
 
 @Controller('api/v1/reader')
 export class ReaderController {
@@ -22,8 +24,8 @@ export class ReaderController {
   }
 
   @Get()
-  public async findAll(): Promise<Reader[]> {
-    return await this.readerService.findAll();
+  public async findAll(@Query() query: FindReadersDto): Promise<Reader[]> {
+    return await this.readerService.findAll(query);
   }
 
   @Get('id/:id')
