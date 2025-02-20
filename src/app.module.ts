@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ReaderModule } from './reader/reader.module';
+import { BookModule } from './book/book.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ReaderModule } from './reader/reader.module';
       }),
     }),
     ReaderModule,
+    BookModule,
   ],
   controllers: [AppController],
   providers: [AppService],
