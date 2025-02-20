@@ -58,12 +58,17 @@ export class ReaderService {
     return reader;
   }
 
-  public async update(id: number, updateReaderDto: UpdateReaderDto): Promise<Reader> {
+  public async update(
+    id: number,
+    updateReaderDto: UpdateReaderDto,
+  ): Promise<Reader> {
     await this.findBy<'id'>('id', id);
 
     if (
       updateReaderDto.email &&
-      (await this.findBy<'email'>('email', updateReaderDto.email))
+      (await this.readerRepository.findOne({
+        where: { email: updateReaderDto.email },
+      }))
     ) {
       throw new ConflictException(
         `O e-mail ${updateReaderDto.email} já está cadastrado.`,
@@ -72,7 +77,9 @@ export class ReaderService {
 
     if (
       updateReaderDto.cpf &&
-      (await this.findBy<'cpf'>('cpf', updateReaderDto.cpf))
+      (await this.readerRepository.findOne({
+        where: { cpf: updateReaderDto.cpf },
+      }))
     ) {
       throw new ConflictException(
         `O CPF ${updateReaderDto.cpf} já está cadastrado.`,
@@ -80,7 +87,7 @@ export class ReaderService {
     }
 
     const updatedReader = await this.readerRepository.preload({
-      id,
+      id: id,
       ...updateReaderDto,
     });
 
