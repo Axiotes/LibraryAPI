@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Loan } from 'src/loan/loan.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Reader {
@@ -13,4 +14,7 @@ export class Reader {
 
   @Column({ unique: true, length: 11 })
   cpf: string;
+
+  @OneToMany(() => Loan, (loan) => loan.id)
+  loan: Loan;
 }

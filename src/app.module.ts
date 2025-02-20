@@ -6,6 +6,7 @@ import { join } from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ReaderModule } from './reader/reader.module';
 import { BookModule } from './book/book.module';
+import { LoanModule } from './loan/loan.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { BookModule } from './book/book.module';
     }),
     ReaderModule,
     BookModule,
+    LoanModule,
   ],
   controllers: [AppController],
   providers: [AppService],
