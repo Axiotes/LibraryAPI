@@ -11,7 +11,10 @@ export class Loan {
   loanDate: Date;
 
   @Column()
-  returnDate: Date;
+  limitReturnDate: Date;
+
+  @Column({ nullable: true })
+  returnedDate: Date;
 
   @Column()
   returned: boolean;
