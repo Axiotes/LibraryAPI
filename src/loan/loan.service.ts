@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
@@ -41,9 +42,11 @@ export class LoanService {
       this.loanRepository.manager.connection.createQueryRunner();
 
     await queryRunner.startTransaction();
+    let newLoans: Loan[] = [];
 
     try {
-      loanDto.bookIds.forEach(async (id) => {
+      for (let i = 0; i <= loanDto.bookIds.length; i++) {
+        const id = loanDto.bookIds[i];
         const book = await this.bookService.findOne(id);
 
         const loan = await this.loanRepository.create({
@@ -54,12 +57,11 @@ export class LoanService {
           reader,
           book,
         });
-        await this.loanRepository.save(loan);
-      });
+        newLoans.push(await this.loanRepository.save(loan));
+      }
 
       await queryRunner.commitTransaction();
-
-      return "Success";
+      return newLoans;
     } catch (err) {
       await queryRunner.rollbackTransaction();
       throw new InternalServerErrorException(
