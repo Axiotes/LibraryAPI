@@ -8,6 +8,7 @@ import { Book } from './book.entity';
 import { Repository } from 'typeorm';
 import { BookDto } from './dtos/book-dto';
 import { FindBookDto } from './dtos/find-book.dto';
+import { UpdateBookDto } from './dtos/update-book.dto';
 
 @Injectable()
 export class BookService {
@@ -79,5 +80,16 @@ export class BookService {
       .orderBy('book.id', queryParams.orderBy);
 
     return await query.getMany();
+  }
+
+  public async update(id: number, updateBookDto: UpdateBookDto): Promise<Book> {
+    await this.findOne(id);
+
+    const updatedBook = await this.bookRepository.preload({
+      id: id,
+      ...updateBookDto,
+    });
+
+    return await this.bookRepository.save(updatedBook);
   }
 }

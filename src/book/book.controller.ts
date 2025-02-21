@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
 } from '@nestjs/common';
@@ -11,6 +12,7 @@ import { BookService } from './book.service';
 import { BookDto } from './dtos/book-dto';
 import { Book } from './book.entity';
 import { FindBookDto } from './dtos/find-book.dto';
+import { UpdateBookDto } from './dtos/update-book.dto';
 
 @Controller('api/v1/book')
 export class BookController {
@@ -29,5 +31,13 @@ export class BookController {
   @Get()
   public async find(@Query() query: FindBookDto) {
     return await this.bookService.find(query);
+  }
+
+  @Patch(':id')
+  public async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: UpdateBookDto,
+  ) {
+    return await this.bookService.update(id, body);
   }
 }
