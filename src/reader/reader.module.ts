@@ -7,6 +7,7 @@ import { ReaderService } from './reader.service';
 @Module({
     imports: [TypeOrmModule.forFeature([Reader])],
     controllers: [ReaderController],
-    providers: [ReaderService]
+    providers: [ReaderService],
+    exports: [ReaderService]
 })
 export class ReaderModule {}
