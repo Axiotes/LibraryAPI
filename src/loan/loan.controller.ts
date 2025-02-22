@@ -5,11 +5,13 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
 } from '@nestjs/common';
 import { LoanService } from './loan.service';
 import { LoanDto } from './dtos/loan.dto';
 import { Loan } from './loan.entity';
 import { Observable } from 'rxjs';
+import { FindLoanDto } from './dtos/find-loan.dto';
 
 @Controller('api/v1/loan')
 export class LoanController {
@@ -25,5 +27,10 @@ export class LoanController {
   @Get(':id')
   public async findOne(@Param('id', ParseIntPipe) id: number): Promise<Loan> {
     return await this.loanService.findOne(id);
+  }
+
+  @Get('')
+  public async find(@Query() query: FindLoanDto) {
+    return this.loanService.find(query);
   }
 }

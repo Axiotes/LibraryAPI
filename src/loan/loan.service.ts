@@ -10,6 +10,7 @@ import { ReaderService } from 'src/reader/reader.service';
 import { BookService } from 'src/book/book.service';
 import { LoanDto } from './dtos/loan.dto';
 import { Observable, throwError } from 'rxjs';
+import { FindLoanDto } from './dtos/find-loan.dto';
 
 @Injectable()
 export class LoanService {
@@ -100,5 +101,70 @@ export class LoanService {
     }
 
     return loan;
+  }
+
+  public async find(queryParams: FindLoanDto) {
+    if (queryParams.skip && !queryParams.limit) {
+      throw new BadRequestException(
+        'O parâmetro "limit" é obrigatório quando "skip" for utilizado.',
+      );
+    }
+
+    if (
+      queryParams.bookLoanDates &&
+      (!queryParams.firstDate || !queryParams.lastDate)
+    ) {
+      throw new BadRequestException(
+        'O parâmetro "bookLoanDates" deve usado em conjunto com os parâmetros "firstDate" e "lastDate"',
+      );
+    }
+
+    const query = this.loanRepository.createQueryBuilder('loan');
+
+    const verifyQueryParams: { [K in keyof FindLoanDto]?: () => void } = {
+      readerId: () => {
+        query.andWhere('loan.readerId = :readerId', {
+          readerId: queryParams.readerId,
+        });
+      },
+      bookId: () =>
+        query.andWhere('loan.bookId = :bookId', { bookId: queryParams.bookId }),
+      returned: () =>
+        query.andWhere('loan.returned = :returned', {
+          returned: queryParams.returned ? 1 : 0,
+        }),
+      bookLoanDates: () => {
+        if (
+          (queryParams.firstDate && !queryParams.lastDate) ||
+          (!queryParams.firstDate && queryParams.lastDate)
+        ) {
+          throw new BadRequestException(
+            'Os parâmetros "firstDate" e "lastDate" devem ser usados em conjunto',
+          );
+        }
+
+        query.andWhere(
+          `loan.${queryParams.bookLoanDates} BETWEEN :firstDate AND :lastDate`,
+          {
+            firstDate: queryParams.firstDate,
+            lastDate: queryParams.lastDate,
+          },
+        );
+      },
+    };
+
+    for (let key in queryParams) {
+      const func = verifyQueryParams[key];
+      func ? func() : '';
+    }
+
+    query
+      .skip(queryParams.skip)
+      .take(queryParams.limit)
+      .orderBy('loan.id', queryParams.orderBy)
+      .leftJoinAndSelect('loan.reader', 'reader')
+      .leftJoinAndSelect('loan.book', 'book');
+
+    return await query.getMany();
   }
 }
