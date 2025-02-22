@@ -103,7 +103,7 @@ export class LoanService {
     return loan;
   }
 
-  public async find(queryParams: FindLoanDto) {
+  public async find(queryParams: FindLoanDto): Promise<Loan[]> {
     if (queryParams.skip && !queryParams.limit) {
       throw new BadRequestException(
         'O parâmetro "limit" é obrigatório quando "skip" for utilizado.',
@@ -166,5 +166,17 @@ export class LoanService {
       .leftJoinAndSelect('loan.book', 'book');
 
     return await query.getMany();
+  }
+
+  public async returnBook(loanId: number) {
+    const loan = await this.findOne(loanId);
+
+    const returnedLoan = await this.loanRepository.preload({
+      ...loan,
+      returnedDate: new Date(),
+      returned: true,
+    });
+
+    return await this.loanRepository.save(returnedLoan);
   }
 }

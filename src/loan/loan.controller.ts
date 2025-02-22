@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
 } from '@nestjs/common';
@@ -24,13 +25,20 @@ export class LoanController {
     return this.loanService.create(body);
   }
 
+  @Get('')
+  public async find(@Query() query: FindLoanDto): Promise<Loan[]> {
+    return this.loanService.find(query);
+  }
+
   @Get(':id')
   public async findOne(@Param('id', ParseIntPipe) id: number): Promise<Loan> {
     return await this.loanService.findOne(id);
   }
 
-  @Get('')
-  public async find(@Query() query: FindLoanDto) {
-    return this.loanService.find(query);
+  @Patch(':id')
+  public async returnBook(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Loan> {
+    return await this.loanService.returnBook(id);
   }
 }
