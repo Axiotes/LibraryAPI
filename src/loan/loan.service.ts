@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Loan } from './loan.entity';
 import { Repository } from 'typeorm';
@@ -21,16 +16,21 @@ export class LoanService {
   ) {}
 
   public async create(loanDto: LoanDto) {
-    if (loanDto.bookIds.length > 3) {
-      throw new BadRequestException(
-        'Cada leitor pode realizar no máximo 3 empréstimos simultâneos',
-      );
-    }
-
     const reader = await this.readerService.findBy<'cpf'>(
       'cpf',
       loanDto.readerCpf,
     );
+
+    const numLoans = await this.loanRepository.find({
+      where: { reader, returned: false },
+    });
+    const totalLoans = numLoans.length + loanDto.bookIds.length;
+
+    if (totalLoans > 3) {
+      throw new BadRequestException(
+        `O leitor ${reader.name} possui ${numLoans.length} empréstimos ativos. Cada leitor pode realizar no máximo 3 empréstimos simultâneos`,
+      );
+    }
 
     const loanDate = new Date();
     const limitReturnDate = new Date(
@@ -55,7 +55,7 @@ export class LoanService {
         });
 
         if (existingLoan) {
-          throw new ConflictException(
+          throw new BadRequestException(
             `O leitor ${reader.name} já possui um empréstimo ativo com o livro ${book.title}`,
           );
         }
