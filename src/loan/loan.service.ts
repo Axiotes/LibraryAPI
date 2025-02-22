@@ -50,19 +50,23 @@ export class LoanService {
     let newLoans: Loan[] = [];
 
     try {
+      let lastBookId: number;
+
       for (let i = 0; i < loanDto.bookIds.length; i++) {
-        const id = loanDto.bookIds[i];
-        const book = await this.bookService.findOne(id);
+        const bookId = loanDto.bookIds[i];
+        const book = await this.bookService.findOne(bookId);
 
         const existingLoan = await this.loanRepository.findOne({
           where: { book, reader, returned: false },
         });
 
-        if (existingLoan) {
+        if (existingLoan || lastBookId === bookId) {
           throw new BadRequestException(
-            `O leitor ${reader.name} já possui um empréstimo ativo com o livro ${book.title}`,
+            `Não é permitido ter empréstimos ativos do mesmo livro`,
           );
         }
+
+        lastBookId = bookId;
 
         const loan = await queryRunner.manager.getRepository(Loan).create({
           loanDate,
