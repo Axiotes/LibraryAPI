@@ -1,11 +1,15 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Loan } from './loan.entity';
 import { Repository } from 'typeorm';
 import { ReaderService } from 'src/reader/reader.service';
 import { BookService } from 'src/book/book.service';
 import { LoanDto } from './dtos/loan.dto';
-import { throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 
 @Injectable()
 export class LoanService {
@@ -15,7 +19,7 @@ export class LoanService {
     private readonly bookService: BookService,
   ) {}
 
-  public async create(loanDto: LoanDto) {
+  public async create(loanDto: LoanDto): Promise<Loan[] | Observable<never>> {
     const reader = await this.readerService.findBy<'cpf'>(
       'cpf',
       loanDto.readerCpf,
@@ -79,5 +83,18 @@ export class LoanService {
     } finally {
       await queryRunner.release();
     }
+  }
+
+  public async findOne(id: number): Promise<Loan> {
+    const loan = await this.loanRepository.findOne({
+      where: { id },
+      relations: ['reader', 'book'],
+    });
+
+    if (!loan) {
+      throw new NotFoundException('Empréstimo não encontrado');
+    }
+
+    return loan;
   }
 }
