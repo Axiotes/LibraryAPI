@@ -25,6 +25,11 @@ export class LoanController {
     return this.loanService.create(body);
   }
 
+  @Get('top-five-books')
+  public async popularBooks() {
+    return await this.loanService.topFiveBooks();
+  }
+
   @Get('')
   public async find(@Query() query: FindLoanDto): Promise<Loan[]> {
     return this.loanService.find(query);

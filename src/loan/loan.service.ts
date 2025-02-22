@@ -179,4 +179,16 @@ export class LoanService {
 
     return await this.loanRepository.save(returnedLoan);
   }
+
+  public async topFiveBooks() {
+    return await this.loanRepository
+      .createQueryBuilder('loan')
+      .leftJoin('loan.book', 'book')
+      .select('book.id', 'bookId')
+      .addSelect('COUNT(loan.id)', 'totalLoans')
+      .groupBy('book.id')
+      .orderBy('totalLoans', 'DESC')
+      .limit(5)
+      .getRawMany();
+  }
 }
