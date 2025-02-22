@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -40,4 +41,9 @@ export class BookController {
   ) {
     return await this.bookService.update(id, body);
   }
+
+  @Delete(':id')
+    public async delete(@Param('id', ParseIntPipe) id: number) {
+      return await this.bookService.delete(id);
+    }
 }

@@ -173,7 +173,7 @@ export class LoanService {
     const loan = await this.findOne(loanId);
 
     if (loan.returned) {
-      throw new ConflictException('O livro do empréstimo já foi devolvido')
+      throw new ConflictException('O livro do empréstimo já foi devolvido');
     }
 
     const returnedLoan = await this.loanRepository.preload({
@@ -195,5 +195,13 @@ export class LoanService {
       .orderBy('totalLoans', 'DESC')
       .limit(5)
       .getRawMany();
+  }
+
+  public async delete(id: number): Promise<{ message: string }> {
+    const user = await this.findOne(id);
+
+    await this.loanRepository.delete(user.id);
+
+    return { message: 'Empréstimo deletado' };
   }
 }

@@ -92,4 +92,12 @@ export class BookService {
 
     return await this.bookRepository.save(updatedBook);
   }
+
+  public async delete(id: number): Promise<{ message: string }> {
+    const user = await this.findOne(id);
+
+    await this.bookRepository.delete(user.id);
+
+    return { message: 'Livro deletado' };
+  }
 }

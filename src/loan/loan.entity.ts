@@ -19,9 +19,9 @@ export class Loan {
   @Column()
   returned: boolean;
 
-  @ManyToOne(() => Reader, (reader) => reader.id)
+  @ManyToOne(() => Reader, (reader) => reader.id, { onDelete: 'CASCADE' })
   reader: Reader;
 
-  @ManyToOne(() => Book, (book) => book.id)
+  @ManyToOne(() => Book, (book) => book.id, { onDelete: 'CASCADE' })
   book: Book;
 }

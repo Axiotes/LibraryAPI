@@ -106,4 +106,12 @@ export class ReaderService {
 
     return await this.readerRepository.save(updatedReader);
   }
+
+  public async delete(id: number): Promise<{ message: string }> {
+    const user = await this.findBy<'id'>('id', id);
+
+    await this.readerRepository.delete(user.id);
+
+    return { message: 'Leitor deletado' };
+  }
 }

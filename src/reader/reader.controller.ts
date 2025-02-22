@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -46,5 +47,10 @@ export class ReaderController {
     @Body() body: UpdateReaderDto,
   ): Promise<Reader> {
     return await this.readerService.update(id, body);
+  }
+
+  @Delete(':id')
+  public async delete(@Param('id', ParseIntPipe) id: number) {
+    return await this.readerService.delete(id);
   }
 }
