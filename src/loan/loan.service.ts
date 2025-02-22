@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 import { ReaderService } from 'src/reader/reader.service';
 import { BookService } from 'src/book/book.service';
 import { LoanDto } from './dtos/loan.dto';
+import { throwError } from 'rxjs';
 
 @Injectable()
 export class LoanService {
@@ -45,11 +46,21 @@ export class LoanService {
     let newLoans: Loan[] = [];
 
     try {
-      for (let i = 0; i <= loanDto.bookIds.length; i++) {
+      for (let i = 0; i < loanDto.bookIds.length; i++) {
         const id = loanDto.bookIds[i];
         const book = await this.bookService.findOne(id);
 
-        const loan = await this.loanRepository.create({
+        const existingLoan = await this.loanRepository.findOne({
+          where: { book, reader, returned: false },
+        });
+
+        if (existingLoan) {
+          throw new ConflictException(
+            `O leitor ${reader.name} já possui um empréstimo ativo com o livro ${book.title}`,
+          );
+        }
+
+        const loan = await queryRunner.manager.getRepository(Loan).create({
           loanDate,
           limitReturnDate,
           returned: false,
@@ -57,16 +68,14 @@ export class LoanService {
           reader,
           book,
         });
-        newLoans.push(await this.loanRepository.save(loan));
+        newLoans.push(await queryRunner.manager.getRepository(Loan).save(loan));
       }
 
       await queryRunner.commitTransaction();
       return newLoans;
     } catch (err) {
       await queryRunner.rollbackTransaction();
-      throw new InternalServerErrorException(
-        'Falha ao cadastrar o empréstimo. Tente novamente!',
-      );
+      return throwError(() => err);
     } finally {
       await queryRunner.release();
     }
