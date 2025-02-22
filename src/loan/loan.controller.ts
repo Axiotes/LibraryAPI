@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -45,5 +46,10 @@ export class LoanController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<Loan> {
     return await this.loanService.returnBook(id);
+  }
+
+  @Delete(':id')
+  public async delete(@Param('id', ParseIntPipe) id: number) {
+    return await this.loanService.delete(id);
   }
 }
