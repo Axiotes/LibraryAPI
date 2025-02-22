@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -170,6 +171,10 @@ export class LoanService {
 
   public async returnBook(loanId: number) {
     const loan = await this.findOne(loanId);
+
+    if (loan.returned) {
+      throw new ConflictException('O livro do empréstimo já foi devolvido')
+    }
 
     const returnedLoan = await this.loanRepository.preload({
       ...loan,
