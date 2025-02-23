@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsDate, IsOptional, IsString } from 'class-validator';
+import { IsDate, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdateBookDto {
   @IsOptional()
@@ -22,4 +22,8 @@ export class UpdateBookDto {
   @Type(() => Date)
   @IsDate()
   yearPublication: Date;
+
+  @IsOptional()
+  @IsNumber()
+  stock: number;
 }
