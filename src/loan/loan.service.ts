@@ -12,6 +12,7 @@ import { BookService } from 'src/book/book.service';
 import { LoanDto } from './dtos/loan.dto';
 import { Observable, throwError } from 'rxjs';
 import { FindLoanDto } from './dtos/find-loan.dto';
+import { Book } from 'src/book/book.entity';
 
 @Injectable()
 export class LoanService {
@@ -56,7 +57,11 @@ export class LoanService {
 
       for (let i = 0; i < loanDto.bookIds.length; i++) {
         const bookId = loanDto.bookIds[i];
-        const book = await this.bookService.findOne(bookId);
+        const { book, available } = await this.bookAvailability(bookId);
+
+        if (available === 0) {
+          throw new BadRequestException('Este livro está fora de estoque');
+        }
 
         const existingLoan = await this.loanRepository.findOne({
           where: { book, reader, returned: false },
@@ -203,5 +208,16 @@ export class LoanService {
     await this.loanRepository.delete(user.id);
 
     return { message: 'Empréstimo deletado' };
+  }
+
+  public async bookAvailability(
+    bookId: number,
+  ): Promise<{ book: Book; available: number }> {
+    const book = await this.bookService.findOne(bookId);
+    const loans = await this.loanRepository.find({
+      where: { book, returned: false },
+    });
+
+    return { book: book, available: book.stock - loans.length };
   }
 }

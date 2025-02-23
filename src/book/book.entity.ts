@@ -21,6 +21,9 @@ export class Book {
   @Column()
   yearPublication: Date;
 
+  @Column()
+  stock: number
+
   @OneToMany(() => Loan, (loan) => loan.id)
   loan: Loan;
 }

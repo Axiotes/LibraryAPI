@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsDate, IsString } from 'class-validator';
+import { IsDate, IsNumber, IsString } from 'class-validator';
 
 export class BookDto {
   @IsString()
@@ -17,4 +17,7 @@ export class BookDto {
   @Type(() => Date)
   @IsDate()
   yearPublication: Date;
+
+  @IsNumber()
+  stock: number;
 }
