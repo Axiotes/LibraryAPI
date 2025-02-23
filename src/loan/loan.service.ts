@@ -57,7 +57,11 @@ export class LoanService {
 
       for (let i = 0; i < loanDto.bookIds.length; i++) {
         const bookId = loanDto.bookIds[i];
-        const book = await this.bookService.findOne(bookId);
+        const { book, available } = await this.bookAvailability(bookId);
+
+        if (available === 0) {
+          throw new BadRequestException('Este livro está fora de estoque');
+        }
 
         const existingLoan = await this.loanRepository.findOne({
           where: { book, reader, returned: false },
