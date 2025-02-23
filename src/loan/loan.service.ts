@@ -12,6 +12,7 @@ import { BookService } from 'src/book/book.service';
 import { LoanDto } from './dtos/loan.dto';
 import { Observable, throwError } from 'rxjs';
 import { FindLoanDto } from './dtos/find-loan.dto';
+import { Book } from 'src/book/book.entity';
 
 @Injectable()
 export class LoanService {
@@ -203,5 +204,16 @@ export class LoanService {
     await this.loanRepository.delete(user.id);
 
     return { message: 'Empréstimo deletado' };
+  }
+
+  public async bookAvailability(
+    bookId: number,
+  ): Promise<{ book: Book; available: number }> {
+    const book = await this.bookService.findOne(bookId);
+    const loans = await this.loanRepository.find({
+      where: { book, returned: false },
+    });
+
+    return { book: book, available: book.stock - loans.length };
   }
 }

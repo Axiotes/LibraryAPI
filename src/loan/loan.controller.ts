@@ -14,6 +14,7 @@ import { LoanDto } from './dtos/loan.dto';
 import { Loan } from './loan.entity';
 import { Observable } from 'rxjs';
 import { FindLoanDto } from './dtos/find-loan.dto';
+import { Book } from 'src/book/book.entity';
 
 @Controller('api/v1/loan')
 export class LoanController {
@@ -39,6 +40,13 @@ export class LoanController {
   @Get(':id')
   public async findOne(@Param('id', ParseIntPipe) id: number): Promise<Loan> {
     return await this.loanService.findOne(id);
+  }
+
+  @Get('book/:bookId')
+  public async bookAvailabilty(
+    @Param('bookId', ParseIntPipe) bookId: number,
+  ): Promise<{ book: Book; available: number }> {
+    return this.loanService.bookAvailability(bookId);
   }
 
   @Patch(':id')
