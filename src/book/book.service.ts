@@ -58,7 +58,10 @@ export class BookService {
         query.andWhere('book.author LIKE :author', {
           author: `%${queryParams.author}%`,
         }),
-      genres: () => query.andWhere(queryParams.genres),
+      genres: () =>
+        query.andWhere('book.genres LIKE :genres', {
+          genres: `%${queryParams.genres}%`,
+        }),
       firstDate: () =>
         query.andWhere(
           'book.yearPublication BETWEEN :firstDate AND :lastDate',
