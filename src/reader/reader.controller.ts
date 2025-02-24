@@ -28,7 +28,7 @@ export class ReaderController {
   @ApiOperation({
     summary: 'Cadastra um novo leitor e retorna leitor criado',
     description:
-      'Apenas usuário com token jwt e cargos "admin" ou "employee" podem utilizar este endpoint',
+      'Apenas usuários com token jwt e cargos "admin" ou "employee" podem utilizar este endpoint',
   })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
