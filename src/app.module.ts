@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ReaderModule } from './reader/reader.module';
 import { BookModule } from './book/book.module';
 import { LoanModule } from './loan/loan.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { LoanModule } from './loan/loan.module';
     ReaderModule,
     BookModule,
     LoanModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
