@@ -6,7 +6,8 @@ import {
   Entity,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Auth {
@@ -20,6 +21,7 @@ export class Auth {
   email: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column({ type: 'enum', enum: AuthRoleEnum })
@@ -27,7 +29,7 @@ export class Auth {
 
   @BeforeInsert()
   @BeforeUpdate()
-  async hashPassword() {
+  public async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);
   }
 }
