@@ -18,11 +18,18 @@ import { FindReadersDto } from './dtos/find-readers.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { RoleGuard } from 'src/auth/guards/role/role.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 
 @Controller('api/v1/reader')
 export class ReaderController {
   constructor(private readonly readerService: ReaderService) {}
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Cadastra um novo leitor e retorna leitor criado',
+    description:
+      'Apenas usuários com token jwt e cargos "admin" ou "employee" podem utilizar este endpoint',
+  })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
   @Post()
@@ -30,6 +37,12 @@ export class ReaderController {
     return await this.readerService.create(body);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Busca e retorna leitores',
+    description:
+      'Apenas usuários com token jwt e cargos "admin" ou "employee" podem utilizar este endpoint. Caso deseje utilizar o query param "skip", é necessário utiliza-lo em conjunto com o "limit"',
+  })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
   @Get()
@@ -37,6 +50,12 @@ export class ReaderController {
     return await this.readerService.findAll(query);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Busca e retorna leitor com base no ID',
+    description:
+      'Apenas usuários com token jwt e cargos "admin" ou "employee" podem utilizar este endpoint',
+  })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
   @Get('id/:id')
@@ -46,6 +65,12 @@ export class ReaderController {
     return this.readerService.findBy<'id'>('id', id);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Busca e retorna leitor com base no CPF',
+    description:
+      'Apenas usuários com token jwt e cargos "admin" ou "employee" podem utilizar este endpoint',
+  })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
   @Get('cpf/:cpf')
@@ -53,6 +78,12 @@ export class ReaderController {
     return this.readerService.findBy<'cpf'>('cpf', cpf);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Atualiza os dados do leitor e retorna dados atualizados',
+    description:
+      'Apenas usuários com token jwt e cargos "admin" ou "employee" podem utilizar este endpoint',
+  })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
   @Patch(':id')
@@ -63,6 +94,12 @@ export class ReaderController {
     return await this.readerService.update(id, body);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Deleta cadastro de leitor',
+    description:
+      'Apenas usuários com token jwt e cargo "admin" podem utilizar este endpoint',
+  })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin')
   @Delete(':id')

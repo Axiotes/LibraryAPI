@@ -1,16 +1,14 @@
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEmail, IsOptional, IsString, Length } from 'class-validator';
 
 export class UpdateReaderDto {
+  @ApiPropertyOptional({ description: "Atualizar nome do leitor" })
   @IsOptional()
   @IsString()
-  name: string;
+  newName: string;
 
+  @ApiPropertyOptional({ description: "Atualizar email do leitor" })
   @IsOptional()
   @IsEmail()
-  email: string;
-
-  @IsOptional()
-  @IsString()
-  @Length(11, 11)
-  cpf: string;
+  newEmail: string;
 }
