@@ -78,24 +78,13 @@ export class ReaderService {
     await this.findBy<'id'>('id', id);
 
     if (
-      updateReaderDto.email &&
+      updateReaderDto.newEmail &&
       (await this.readerRepository.findOne({
-        where: { email: updateReaderDto.email },
+        where: { email: updateReaderDto.newEmail },
       }))
     ) {
       throw new ConflictException(
-        `O e-mail ${updateReaderDto.email} já está cadastrado.`,
-      );
-    }
-
-    if (
-      updateReaderDto.cpf &&
-      (await this.readerRepository.findOne({
-        where: { cpf: updateReaderDto.cpf },
-      }))
-    ) {
-      throw new ConflictException(
-        `O CPF ${updateReaderDto.cpf} já está cadastrado.`,
+        `O e-mail ${updateReaderDto.newEmail} já está cadastrado.`,
       );
     }
 
