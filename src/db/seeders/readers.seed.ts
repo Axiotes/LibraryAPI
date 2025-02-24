@@ -7,7 +7,7 @@ export default class ReadersSeeder implements Seeder {
   public async run(
     dataSource: DataSource,
     factoryManager: SeederFactoryManager,
-  ): Promise<any> {
+  ): Promise<void> {
     const repository = dataSource.getRepository(Reader);
 
     for (let i = 0; i <= 40; i++) {
