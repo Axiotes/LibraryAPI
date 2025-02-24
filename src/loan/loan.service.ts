@@ -7,12 +7,12 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Loan } from './loan.entity';
 import { Repository } from 'typeorm';
-import { ReaderService } from 'src/reader/reader.service';
+import { ReaderService } from '../reader/reader.service';
 import { BookService } from 'src/book/book.service';
 import { LoanDto } from './dtos/loan.dto';
 import { Observable, throwError } from 'rxjs';
 import { FindLoanDto } from './dtos/find-loan.dto';
-import { Book } from 'src/book/book.entity';
+import { Book } from '../book/book.entity';
 
 @Injectable()
 export class LoanService {
