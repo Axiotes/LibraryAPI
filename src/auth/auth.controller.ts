@@ -2,6 +2,9 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Get,
+  Param,
+  ParseIntPipe,
   Patch,
   Post,
   UseGuards,
@@ -31,14 +34,28 @@ export class AuthController {
   }
 
   @Post('sign-in')
-  public async signIn(@Body() body: SignInDto) {
+  public async signIn(@Body() body: SignInDto): Promise<{ token: string }> {
     return await this.authService.signIn(body);
   }
 
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
+  @Get(':id')
+  public async findOne(@Param('id', ParseIntPipe) id: number): Promise<Auth> {
+    return await this.authService.findOne(id);
+  }
+
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
+  @Roles('admin', 'employee')
+  @Get()
+  public async find(): Promise<Auth[]> {
+    return await this.authService.find();
+  }
+
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
+  @Roles('admin', 'employee')
   @Patch()
-  public async update(@Body() body: UpdateAuthDto) {
-    return await this.authService.update(body)
+  public async update(@Body() body: UpdateAuthDto): Promise<Auth> {
+    return await this.authService.update(body);
   }
 }

@@ -43,7 +43,7 @@ export class AuthService {
     return { token, authUser: savedAuthUser };
   }
 
-  public async signIn(signInDto: SignInDto) {
+  public async signIn(signInDto: SignInDto): Promise<{ token: string }> {
     const authUser = await this.authRepository.findOne({
       where: { email: signInDto.email },
     });
@@ -69,7 +69,15 @@ export class AuthService {
     return { token: token };
   }
 
-  public async update(updateAuthDto: UpdateAuthDto) {
+  public async findOne(id: number): Promise<Auth> {
+    return await this.authRepository.findOne({ where: { id } });
+  }
+
+  public async find(): Promise<Auth[]> {
+    return await this.authRepository.find();
+  }
+
+  public async update(updateAuthDto: UpdateAuthDto): Promise<Auth> {
     const authUser = await this.authRepository.findOne({
       where: { email: updateAuthDto.email },
     });
