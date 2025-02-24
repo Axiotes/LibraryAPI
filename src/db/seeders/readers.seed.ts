@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import { Reader } from '../../reader/reader.entity';
 import { DataSource } from 'typeorm';
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
@@ -8,11 +9,26 @@ export default class ReadersSeeder implements Seeder {
     factoryManager: SeederFactoryManager,
   ): Promise<any> {
     const repository = dataSource.getRepository(Reader);
-    const reader = await repository.create({
-      name: 'Arthur',
-      email: 'arthur@gmail.com',
-      cpf: '71216530440',
-    });
-    await repository.save(reader);
+
+    for (let i = 0; i <= 40; i++) {
+      const reader = await repository.create({
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        cpf: this.generateCPF(),
+      });
+      await repository.save(reader);
+    }
+  }
+
+  public generateCPF(): string {
+    let cpf = '';
+    const characters = '0123456789';
+
+    for (let i = 0; i < 11; i++) {
+      const index = Math.floor(Math.random() * characters.length);
+      cpf += characters[index];
+    }
+
+    return cpf;
   }
 }
