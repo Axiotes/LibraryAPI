@@ -15,7 +15,7 @@ export class FindReadersDto {
   @IsNumber()
   limit: number;
 
-  @ApiPropertyOptional({ description: "Ordenação dos leitores retornados" })
+  @ApiPropertyOptional({ description: "Ordenação dos leitores retornados (ASC ou DESC)" })
   @IsOptional()
   @IsEnum(['ASC', 'DESC'], {
     message: 'O valor de orderBy deve ser ASC ou DESC',

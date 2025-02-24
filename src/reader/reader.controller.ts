@@ -18,12 +18,7 @@ import { FindReadersDto } from './dtos/find-readers.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { RoleGuard } from 'src/auth/guards/role/role.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiOperation,
-  ApiQuery,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 
 @Controller('api/v1/reader')
 export class ReaderController {
@@ -35,7 +30,6 @@ export class ReaderController {
     description:
       'Apenas usuário com token jwt e cargos "admin" ou "employee" podem utilizar este endpoint',
   })
-  @ApiBody({ type: ReaderDto })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
   @Post()
@@ -90,7 +84,6 @@ export class ReaderController {
     description:
       'Apenas usuários com token jwt e cargos "admin" ou "employee" podem utilizar este endpoint',
   })
-  @ApiBody({ type: UpdateReaderDto })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
   @Patch(':id')
