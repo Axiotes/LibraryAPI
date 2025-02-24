@@ -10,7 +10,7 @@ export default class ReadersSeeder implements Seeder {
   ): Promise<void> {
     const repository = dataSource.getRepository(Reader);
 
-    for (let i = 0; i <= 40; i++) {
+    for (let i = 0; i <= 30; i++) {
       const reader = await repository.create({
         name: faker.person.fullName(),
         email: faker.internet.email(),

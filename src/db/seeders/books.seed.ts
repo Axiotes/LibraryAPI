@@ -10,22 +10,11 @@ export default class BooksSeeder implements Seeder {
   ): Promise<void> {
     const repository = dataSource.getRepository(Book);
 
-    for (let i = 0; i <= 80; i++) {
+    for (let i = 0; i <= 65; i++) {
       const book = await repository.create({
-        title: faker.word.words(3),
+        title: faker.book.title(),
         author: faker.person.fullName(),
-        genres: faker.helpers.arrayElement([
-          'Fiction',
-          'Sci-Fi',
-          'Fantasy',
-          'Horror',
-          'Non-fiction',
-          'Mystery',
-          'Romance',
-          'Adventure',
-          'Suspense',
-          'Action',
-        ]),
+        genres: faker.book.genre(),
         synopsis: faker.lorem.paragraphs(2),
         yearPublication: faker.date.past({ years: 50 }),
         stock: faker.number.int({ min: 0, max: 30 }),
