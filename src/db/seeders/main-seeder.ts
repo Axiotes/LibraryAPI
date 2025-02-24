@@ -10,12 +10,13 @@ export class MainSeeder implements Seeder {
     dataSource: DataSource,
     factoryManager: SeederFactoryManager,
   ): Promise<void> {
-    await runSeeder(dataSource, ReadersSeeder);
-    await runSeeder(dataSource, BooksSeeder);
-    await runSeeder(dataSource, LoansSeerder);
-    await runSeeder(dataSource, FakeAuthSeeders);
+    
 
-    console.log("process argv: ", process.argv); // 5 to admin flag
-    console.log("flag: ", process.argv[5]);
+    if (process.env.FAKE_DATA) {
+      await runSeeder(dataSource, ReadersSeeder);
+      await runSeeder(dataSource, BooksSeeder);
+      await runSeeder(dataSource, LoansSeerder);
+      await runSeeder(dataSource, FakeAuthSeeders);
+    }
   }
 }
