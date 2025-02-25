@@ -1,85 +1,76 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Library API
+API RESTful desenvolvida para realizar o gerenciamento de livros em uma biblioteca, permitindo o controle de usuários, livros e empréstimos.
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Tecnologias utilizadas
+- NestJS
+- MySQL
+- Docker
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Principais funcionalidades
+- **Controle de usuários**
+     - Cadastrar, deletar e atualizar usuários
+     - Buscar informações de todos os usuários ou de usuários específicos
+- **Controle de livros**
+     - Cadastrar, deletar e atualizar livros
+     - Realizar buscas de todos os livros ou livros específicos
+     - Realizar buscas dos livros mais emprestados
+- **Controle de empréstimos**
+     - Realizar um novo empréstimo (Cada usuário pode realizar no máximo 3 empréstimos simultâneos)
+     - Cadastrar a devolução de um livro
+     - Verificar usuários com empréstimos pendentes
 
-## Description
+## Instalação do Projeto
+### Pré-requisitos
+1. **Git**
+    - É necessário que tenha o **git** na sua última versão
+    - Verificar se o git está instalado:
+    ```bash
+    git --version
+    ```
+    - Caso não esteja instalado, é possível instalar através do [Downloads - Git](https://git-scm.com/downloads)
+2. **Docker**
+    - É necessário que tenha **docker** para realizar execução do projeto
+    - Verificar se o Docker está instalado
+   ```bash
+   docker --version
+   ```
+   - Caso não esteja instalado, é possível instalar através do [Docker Docs](https://docs.docker.com/engine/install/)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
+### Processo de instalação e execução do projeto
+1. Clonar o repositório na sua máquina
 ```bash
-$ npm install
+git clone git@github.com:Axiotes/LibraryAPI.git
+```
+2. Entrar no diretório
+```bash
+cd LibraryAPI
+```
+3. Variáveis de ambiente
+   - No diretório da api haverá um arquivo de texto chamado `env_example`, copie o texto do arquivo
+   - Crie um arquivo chamado `.env`, cole o que foi copiado
+   - Atribua a chave `DATABASE_HOST` o valor `"db"`
+   - Atribua as chaves de `USER_NAME` e `PASSWORD` o valor `"root"`
+   - Atribua a chave `PORT` o valor `3306`
+   - Atribua a chave `JWT_SECRET` com uma string do seu desejo
+   - Para as chaves `ADMIN_NAME`, `ADMIN_EMAIL` E `ADMIN_PASSWORD` atribua com strings do seu desejo, elas serão utilizadas para criar um usuário admin base. Com ele será possivel acessar alguns do endpoints protegidos e gerar novos usuários autenticados
+5. Realizar o build da aplicação
+```bash
+docker-compose build
+```
+6. Executar aplicação
+```bash
+docker-compose up
+```
+7. Executar o seed
+Com a aplicação em execução, execute o seguinte comando para gerar um usuário admin principal, com base no que foi declarado no `.env`. Com ele você poderá utilizar o endpoint `sign-in` de `Auth`, para obter um token e utilizar o token nos endpoints protegidos
+```bash
+npm run seed
+```
+8. Gerar dados falsos **(Opcional)**
+Com a aplicação em execução, é possível utilizar o seguinte comando para gerar dados falsos
+```bash
+npm run seed:fake-data
 ```
 
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## Swagger
+Com a api em execução, utilize a rota `http://localhost:3000/api` no navegador para acessar o swagger, nele estará documentado dos os endpoints
