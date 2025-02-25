@@ -19,6 +19,4 @@ const dataSourceOptions = {
   seeds: [MainSeeder],
 } as DataSourceOptions & SeederOptions;
 
-console.log(dataSourceOptions);
-
 export const AppDataSource = new DataSource(dataSourceOptions);
