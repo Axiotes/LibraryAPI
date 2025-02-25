@@ -50,7 +50,7 @@ Renomeie o arquivo `env_example` para `.env` e atribua valores ao respectivas va
 ```
 DATABASE_HOST="db"
 DATABASE_USERNAME="root"
-DATABASE_PASSWORD="password"
+DATABASE_PASSWORD="root"
 DATABASE_PORT=3306
 DATABASE_NAME="db_library"
 JWT_SECRET=f446942879bc545d290cb33bd3d2000bfe990ddb3a28d23daac3e4f2d80adc1c
