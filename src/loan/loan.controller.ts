@@ -15,7 +15,7 @@ import { LoanDto } from './dtos/loan.dto';
 import { Loan } from './loan.entity';
 import { Observable } from 'rxjs';
 import { FindLoanDto } from './dtos/find-loan.dto';
-import { Book } from 'src/book/book.entity';
+import { Book } from '../book/book.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { RoleGuard } from 'src/auth/guards/role/role.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';

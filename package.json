@@ -17,9 +17,12 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "seed": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:run  -d src/db/data-source.ts",
+    "seed:fake-data": "FAKE_DATA=true ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:run  -d src/db/data-source.ts"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.5.0",
     "@nestjs/common": "^11.0.0",
     "@nestjs/config": "^4.0.0",
     "@nestjs/core": "^11.0.0",
@@ -37,7 +40,8 @@
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.20",
+    "typeorm-extension": "^3.6.3"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
