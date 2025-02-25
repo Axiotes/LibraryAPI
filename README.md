@@ -45,15 +45,21 @@ git clone git@github.com:Axiotes/LibraryAPI.git
 ```bash
 cd LibraryAPI
 ```
-3. Variáveis de ambiente
-   - No diretório da api haverá um arquivo de texto chamado `env_example`, copie o texto do arquivo
-   - Crie um arquivo chamado `.env`, cole o que foi copiado
-   - Atribua a chave `DATABASE_HOST` o valor `"db"`
-   - Atribua as chaves de `DATABASE_USERNAME` e `DATABASE_PASSWORD` o valor `"root"`
-   - Atribua a chave `DATABASE_PORT` o valor `3306`
-   - Atribua a cheva `DATABASE_NAME` o valor `"db_library"`
-   - Atribua a chave `JWT_SECRET` com uma string do seu desejo
-   - Para as chaves `ADMIN_NAME`, `ADMIN_EMAIL` E `ADMIN_PASSWORD` atribua com strings do seu desejo, elas serão utilizadas para criar um usuário admin base. Com ele será possivel acessar alguns do endpoints protegidos e gerar novos usuários autenticados
+3. Variáveis de ambiente  
+Renomeie o arquivo `env_example` para `.env` e atribua valores ao respectivas variáveis, exemplo:
+```
+DATABASE_HOST="db"
+DATABASE_USERNAME="root"
+DATABASE_PASSWORD="password"
+DATABASE_PORT=3306
+DATABASE_NAME="db_library"
+JWT_SECRET=f446942879bc545d290cb33bd3d2000bfe990ddb3a28d23daac3e4f2d80adc1c
+ADMIN_NAME="Meu nome"
+ADMIN_EMAIL="meu@email.com"
+ADMIN_PASSWORD="minha_senha"
+```
+Para o gerar o `JWT_SECRET` você pode utilizar o https://jwtsecret.com/generate  
+As chaves `ADMIN_NAME`, `ADMIN_EMAIL` E `ADMIN_PASSWORD` serão utilizadas para criar um usuário admin base. Com ele será possível acessar alguns do endpoints protegidos e gerar novos usuários autenticados
 5. Realizar o build da aplicação
 ```bash
 docker-compose build
