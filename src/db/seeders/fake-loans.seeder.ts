@@ -5,7 +5,7 @@ import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { Reader } from '../../reader/reader.entity';
 import { Book } from '../../book/book.entity';
 
-export default class LoansSeerder implements Seeder {
+export default class FakeLoansSeerder implements Seeder {
   public async run(
     dataSource: DataSource,
     factoryManager: SeederFactoryManager,

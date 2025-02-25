@@ -5,14 +5,17 @@ import { Reader } from '../reader/reader.entity';
 import { Loan } from '../loan/loan.entity';
 import { Book } from '../book/book.entity';
 import { Auth } from '../auth/auth.entity';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 const dataSourceOptions = {
   type: 'mysql',
   host: 'localhost',
-  port: 3306,
-  username: 'root',
-  password: 'root',
-  database: 'db_library',
+  port: Number(process.env.DATABASE_PORT),
+  username: process.env.DATABASE_USERNAME,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME,
   entities: [Reader, Loan, Book, Auth],
   synchronize: true,
   logging: true,

@@ -3,7 +3,7 @@ import { Reader } from '../../reader/reader.entity';
 import { DataSource } from 'typeorm';
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 
-export default class ReadersSeeder implements Seeder {
+export default class FakeReadersSeeder implements Seeder {
   public async run(
     dataSource: DataSource,
     factoryManager: SeederFactoryManager,
