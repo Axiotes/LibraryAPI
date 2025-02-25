@@ -61,13 +61,13 @@ docker-compose build
 ```bash
 docker-compose up
 ```
-7. Executar o seed
-Com a aplicação em execução, execute o seguinte comando para gerar um usuário admin principal, com base no que foi declarado no `.env`. Com ele você poderá utilizar o endpoint `sign-in` de `Auth`, para obter um token e utilizar o token nos endpoints protegidos
+7. Executar o seed  
+     Com a aplicação em execução, execute o seguinte comando para gerar um usuário admin principal, com base no que foi declarado no `.env`. Com ele você poderá utilizar o endpoint `sign-in` de `Auth`, para obter um token e utilizar o token nos endpoints protegidos
 ```bash
 npm run seed
 ```
-8. Gerar dados falsos **(Opcional)**
-Com a aplicação em execução, é possível utilizar o seguinte comando para gerar dados falsos
+8. Gerar dados falsos **(Opcional)**  
+     Com a aplicação em execução, é possível utilizar o seguinte comando para gerar dados falsos
 ```bash
 npm run seed:fake-data
 ```
