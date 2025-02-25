@@ -49,8 +49,9 @@ cd LibraryAPI
    - No diretório da api haverá um arquivo de texto chamado `env_example`, copie o texto do arquivo
    - Crie um arquivo chamado `.env`, cole o que foi copiado
    - Atribua a chave `DATABASE_HOST` o valor `"db"`
-   - Atribua as chaves de `USER_NAME` e `PASSWORD` o valor `"root"`
-   - Atribua a chave `PORT` o valor `3306`
+   - Atribua as chaves de `DATABASE_USERNAME` e `DATABASE_PASSWORD` o valor `"root"`
+   - Atribua a chave `DATABASE_PORT` o valor `3306`
+   - Atribua a cheva `DATABASE_NAME` o valor `"db_library"`
    - Atribua a chave `JWT_SECRET` com uma string do seu desejo
    - Para as chaves `ADMIN_NAME`, `ADMIN_EMAIL` E `ADMIN_PASSWORD` atribua com strings do seu desejo, elas serão utilizadas para criar um usuário admin base. Com ele será possivel acessar alguns do endpoints protegidos e gerar novos usuários autenticados
 5. Realizar o build da aplicação
