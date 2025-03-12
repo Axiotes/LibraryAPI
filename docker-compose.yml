@@ -6,16 +6,24 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: db_library
     ports:
-      - "3306:3306"
+      - '3306:3306'
     networks:
       - app-network
     volumes:
       - mysql-data:/var/lib/mysql
 
   api:
+    stdin_open: true
+    tty: true
     build: ./
     ports:
-      - "3000:3000"
+      - '3000:3000'
+    command:
+      - bash
+      - -c
+      - |
+        npm install
+        npm run start:dev
     depends_on:
       - db
     networks:
