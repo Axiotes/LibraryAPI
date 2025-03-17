@@ -311,4 +311,30 @@ describe('ReaderService', () => {
     expect(result.email).toEqual(readerUpdated.email);
     expect(result.name).toEqual(readerUpdated.name);
   });
+
+  it('should throw an error if the new email is already registered', async () => {
+    const id = 1;
+    const updateReaderDto: UpdateReaderDto = {
+      newEmail: 'email@example.com',
+      newName: undefined,
+    };
+
+    const reader = new Reader();
+    reader.id = id;
+    (reader.email = 'oldemail@example.com'), (reader.name = 'Reader Name');
+
+    service.findBy = jest.fn().mockResolvedValue(reader);
+    readerRepositoryMock.findOne.mockResolvedValueOnce(reader);
+
+    await expect(service.update(id, updateReaderDto)).rejects.toThrow(
+      new ConflictException(
+        `O e-mail ${updateReaderDto.newEmail} já está cadastrado.`,
+      ),
+    );
+    expect(service.findBy).toHaveBeenCalledWith('id', id);
+    expect(service.findBy).toHaveBeenCalledTimes(1);
+    expect(readerRepositoryMock.findOne).toHaveBeenCalledTimes(1);
+    expect(readerRepositoryMock.preload).toHaveBeenCalledTimes(0);
+    expect(readerRepositoryMock.save).toHaveBeenCalledTimes(0);
+  });
 });
