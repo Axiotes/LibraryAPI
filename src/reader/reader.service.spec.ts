@@ -10,6 +10,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { FindReadersDto } from './dtos/find-readers.dto';
+import { UpdateReaderDto } from './dtos/update-reader.dto';
 
 describe('ReaderService', () => {
   let service: ReaderService;
@@ -20,6 +21,7 @@ describe('ReaderService', () => {
       findOne: jest.fn(),
       create: jest.fn(),
       save: jest.fn(),
+      preload: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -209,5 +211,104 @@ describe('ReaderService', () => {
     expect(readerRepositoryMock.findOne).toHaveBeenCalledWith({
       where: { cpf },
     });
+  });
+
+  it("should update a reader's email", async () => {
+    const id = 1;
+    const updateReaderDto: UpdateReaderDto = {
+      newEmail: 'newemail@example.com',
+      newName: undefined,
+    };
+
+    const reader = new Reader();
+    reader.id = id;
+    reader.email = 'oldemail@example.com';
+    reader.name = 'Reader Name';
+
+    const readerUpdated = new Reader();
+    readerUpdated.id = id;
+    readerUpdated.email = updateReaderDto.newEmail;
+    readerUpdated.name = reader.name;
+
+    service.findBy = jest.fn().mockResolvedValue(reader);
+    readerRepositoryMock.findOne.mockResolvedValueOnce(null);
+    readerRepositoryMock.preload.mockResolvedValueOnce(readerUpdated);
+    readerRepositoryMock.save.mockResolvedValueOnce(readerUpdated);
+
+    const result = await service.update(id, updateReaderDto);
+
+    expect(service.findBy).toHaveBeenCalledWith('id', id);
+    expect(service.findBy).toHaveBeenCalledTimes(1);
+    expect(readerRepositoryMock.findOne).toHaveBeenCalledTimes(1);
+    expect(readerRepositoryMock.preload).toHaveBeenCalledTimes(1);
+    expect(readerRepositoryMock.save).toHaveBeenCalledTimes(1);
+    expect(result.email).toEqual(readerUpdated.email);
+    expect(result.name).toEqual(reader.name);
+  });
+
+  it("should update a reader's name", async () => {
+    const id = 1;
+    const updateReaderDto: UpdateReaderDto = {
+      newEmail: undefined,
+      newName: 'New Reader Name',
+    };
+
+    const reader = new Reader();
+    reader.id = id;
+    reader.email = 'reader@example.com';
+    reader.name = 'Old Reader Name';
+
+    const readerUpdated = new Reader();
+    readerUpdated.id = id;
+    readerUpdated.email = reader.email;
+    readerUpdated.name = updateReaderDto.newName;
+
+    service.findBy = jest.fn().mockResolvedValue(reader);
+    readerRepositoryMock.findOne.mockResolvedValueOnce(null);
+    readerRepositoryMock.preload.mockResolvedValueOnce(readerUpdated);
+    readerRepositoryMock.save.mockResolvedValueOnce(readerUpdated);
+
+    const result = await service.update(id, updateReaderDto);
+
+    expect(service.findBy).toHaveBeenCalledWith('id', id);
+    expect(service.findBy).toHaveBeenCalledTimes(1);
+    expect(readerRepositoryMock.findOne).toHaveBeenCalledTimes(0);
+    expect(readerRepositoryMock.preload).toHaveBeenCalledTimes(1);
+    expect(readerRepositoryMock.save).toHaveBeenCalledTimes(1);
+    expect(result.email).toEqual(reader.email);
+    expect(result.name).toEqual(readerUpdated.name);
+  });
+
+  it('should update a reader with a new email and name', async () => {
+    const id = 1;
+    const updateReaderDto: UpdateReaderDto = {
+      newEmail: 'oldemail@example.com',
+      newName: 'New Reader Name',
+    };
+
+    const reader = new Reader();
+    reader.id = id;
+    reader.email = 'oldemail@example.com';
+    reader.name = 'Old Reader Name';
+
+    const readerUpdated = new Reader();
+    readerUpdated.id = id;
+    readerUpdated.email = updateReaderDto.newEmail;
+    readerUpdated.name = updateReaderDto.newName;
+
+    service.findBy = jest.fn().mockResolvedValue(reader);
+    readerRepositoryMock.findOne.mockResolvedValueOnce(null);
+    readerRepositoryMock.preload.mockResolvedValueOnce(readerUpdated);
+    readerRepositoryMock.save.mockResolvedValueOnce(readerUpdated);
+
+    const result = await service.update(id, updateReaderDto);
+
+    expect(service.findBy).toHaveBeenCalledWith('id', id);
+    expect(service.findBy).toHaveBeenCalledTimes(1);
+    expect(readerRepositoryMock.findOne).toHaveBeenCalledTimes(1);
+    expect(readerRepositoryMock.preload).toHaveBeenCalledTimes(1);
+    expect(readerRepositoryMock.save).toHaveBeenCalledTimes(1);
+    expect(result.email).toEqual(readerUpdated.email);
+    expect(result.name).toEqual(readerUpdated.name);
   });
 });
