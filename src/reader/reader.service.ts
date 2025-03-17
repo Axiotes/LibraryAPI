@@ -42,7 +42,7 @@ export class ReaderService {
   }
 
   public async findAll(query: FindReadersDto): Promise<Reader[]> {
-    if (query.skip && !query.limit) {
+    if ((query.skip !== undefined || query.skip !== null) && !query.limit) {
       throw new BadRequestException(
         'O parâmetro "limit" é obrigatório quando "skip" for utilizado.',
       );
