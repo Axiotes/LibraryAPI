@@ -22,6 +22,7 @@ describe('ReaderService', () => {
       create: jest.fn(),
       save: jest.fn(),
       preload: jest.fn(),
+      delete: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -336,5 +337,20 @@ describe('ReaderService', () => {
     expect(readerRepositoryMock.findOne).toHaveBeenCalledTimes(1);
     expect(readerRepositoryMock.preload).toHaveBeenCalledTimes(0);
     expect(readerRepositoryMock.save).toHaveBeenCalledTimes(0);
+  });
+
+  it('should delete a reader', async () => {
+    const id = 1;
+    const reader = new Reader();
+    reader.id = id;
+
+    service.findBy = jest.fn().mockResolvedValue(reader.id);
+
+    const result = await service.delete(id);
+
+    expect(service.findBy).toHaveBeenCalledWith('id', reader.id);
+    expect(service.findBy).toHaveBeenCalledTimes(1);
+    expect(readerRepositoryMock.delete).toHaveBeenCalledTimes(1);
+    expect(result.message).toEqual('Leitor deletado');
   });
 });
