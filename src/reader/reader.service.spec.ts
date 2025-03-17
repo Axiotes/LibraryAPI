@@ -4,7 +4,11 @@ import { Reader } from './reader.entity';
 import { Repository } from 'typeorm';
 import { ReaderDto } from './dtos/reader.dto';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { BadRequestException, ConflictException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import { FindReadersDto } from './dtos/find-readers.dto';
 
 describe('ReaderService', () => {
@@ -147,5 +151,63 @@ describe('ReaderService', () => {
       ),
     );
     expect(readerRepositoryMock.createQueryBuilder).toHaveBeenCalledTimes(0);
+  });
+
+  it('should find a reader by id', async () => {
+    const reader = new Reader();
+    const id = 1;
+
+    readerRepositoryMock.findOne.mockResolvedValueOnce(reader);
+
+    const result = await service.findBy<'id'>('id', id);
+
+    expect(readerRepositoryMock.findOne).toHaveBeenCalledTimes(1);
+    expect(readerRepositoryMock.findOne).toHaveBeenCalledWith({
+      where: { id },
+    });
+    expect(result).toEqual(reader);
+  });
+
+  it('should find a reader by cpf', async () => {
+    const reader = new Reader();
+    const cpf = '12345678901';
+
+    readerRepositoryMock.findOne.mockResolvedValueOnce(reader);
+
+    const result = await service.findBy<'cpf'>('cpf', cpf);
+
+    expect(readerRepositoryMock.findOne).toHaveBeenCalledTimes(1);
+    expect(readerRepositoryMock.findOne).toHaveBeenCalledWith({
+      where: { cpf },
+    });
+    expect(result).toEqual(reader);
+  });
+
+  it('should throw an error if the reader is not found by id', async () => {
+    const id = 1;
+
+    readerRepositoryMock.findOne.mockResolvedValueOnce(null);
+
+    await expect(service.findBy<'id'>('id', id)).rejects.toThrow(
+      new NotFoundException(`Leitor não encontrado`),
+    );
+    expect(readerRepositoryMock.findOne).toHaveBeenCalledTimes(1);
+    expect(readerRepositoryMock.findOne).toHaveBeenCalledWith({
+      where: { id },
+    });
+  });
+
+  it('should throw an error if the reader is not found by cpf', async () => {
+    const cpf = '12345678901';
+
+    readerRepositoryMock.findOne.mockResolvedValueOnce(null);
+
+    await expect(service.findBy<'cpf'>('cpf', cpf)).rejects.toThrow(
+      new NotFoundException(`Leitor não encontrado`),
+    );
+    expect(readerRepositoryMock.findOne).toHaveBeenCalledTimes(1);
+    expect(readerRepositoryMock.findOne).toHaveBeenCalledWith({
+      where: { cpf },
+    });
   });
 });
