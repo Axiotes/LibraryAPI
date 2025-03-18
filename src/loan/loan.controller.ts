@@ -17,8 +17,8 @@ import { Observable } from 'rxjs';
 import { FindLoanDto } from './dtos/find-loan.dto';
 import { Book } from '../book/book.entity';
 import { AuthGuard } from '@nestjs/passport';
-import { RoleGuard } from 'src/auth/guards/role/role.guard';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { RoleGuard } from '../auth/guards/role/role.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 
 @Controller('api/v1/loan')

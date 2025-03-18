@@ -15,9 +15,9 @@ import { BookDto } from './dtos/book-dto';
 import { Book } from './book.entity';
 import { FindBookDto } from './dtos/find-book.dto';
 import { UpdateBookDto } from './dtos/update-book.dto';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
 import { AuthGuard } from '@nestjs/passport';
-import { RoleGuard } from 'src/auth/guards/role/role.guard';
+import { RoleGuard } from '../auth/guards/role/role.guard';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 
 @Controller('api/v1/book')
