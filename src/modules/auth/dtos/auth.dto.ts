@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsEnum, IsString } from 'class-validator';
-import { AuthRoleEnum } from '../../enums/auth-role.enum';
+import { AuthRoleEnum } from 'src/common/enums/auth-role.enum';
 
 export class AuthDto {
   @ApiProperty({ description: "Nome do novo usuário autenticado" })  

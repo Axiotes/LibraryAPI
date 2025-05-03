@@ -1,9 +1,9 @@
 import { faker } from '@faker-js/faker';
-import { Loan } from '../../loan/loan.entity';
+import { Loan } from '../../modules/loan/loan.entity';
 import { DataSource } from 'typeorm';
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
-import { Reader } from '../../reader/reader.entity';
-import { Book } from '../../book/book.entity';
+import { Reader } from 'src/modules/reader/reader.entity';
+import { Book } from 'src/modules/book/book.entity';
 
 export default class FakeLoansSeerder implements Seeder {
   public async run(

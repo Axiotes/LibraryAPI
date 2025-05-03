@@ -4,10 +4,10 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ReaderModule } from './reader/reader.module';
-import { BookModule } from './book/book.module';
-import { LoanModule } from './loan/loan.module';
-import { AuthModule } from './auth/auth.module';
+import { ReaderModule } from './modules/reader/reader.module';
+import { BookModule } from './modules/book/book.module';
+import { LoanModule } from './modules/loan/loan.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [

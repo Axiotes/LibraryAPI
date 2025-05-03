@@ -1,7 +1,7 @@
-import { Auth } from '../../auth/auth.entity';
+import { Auth } from 'src/modules/auth/auth.entity';
 import { DataSource } from 'typeorm';
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
-import { AuthRoleEnum } from '../../enums/auth-role.enum';
+import { AuthRoleEnum } from '../../common/enums/auth-role.enum';
 import 'dotenv/config';
 import * as dotenv from 'dotenv';
 

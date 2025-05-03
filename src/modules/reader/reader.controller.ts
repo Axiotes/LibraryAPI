@@ -16,8 +16,8 @@ import { Reader } from './reader.entity';
 import { UpdateReaderDto } from './dtos/update-reader.dto';
 import { FindReadersDto } from './dtos/find-readers.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { RoleGuard } from 'src/auth/guards/role/role.guard';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { RoleGuard } from '../../common/guards/role/role.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 
 @Controller('api/v1/reader')
