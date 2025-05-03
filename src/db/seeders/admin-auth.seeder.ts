@@ -1,4 +1,4 @@
-import { Auth } from 'src/modules/auth/auth.entity';
+import { Auth } from '../../modules/auth/auth.entity';
 import { DataSource } from 'typeorm';
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { AuthRoleEnum } from '../../common/enums/auth-role.enum';
