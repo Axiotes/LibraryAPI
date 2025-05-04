@@ -6,6 +6,7 @@ import {
   IsEnum,
   IsNumber,
   IsOptional,
+  Min,
 } from 'class-validator';
 
 export class FindLoanDto {
@@ -13,12 +14,14 @@ export class FindLoanDto {
   @IsOptional()
   @Transform(({ value }) => parseInt(value))
   @IsNumber()
+  @Min(0)
   skip: number;
 
   @ApiPropertyOptional({ description: "Número de livros que serão retornados" })
   @IsOptional()
   @Transform(({ value }) => parseInt(value))
   @IsNumber()
+  @Min(1)
   limit: number;
 
   @ApiPropertyOptional({ description: "Ordenação dos leitores retornados (ASC ou DESC)" })
