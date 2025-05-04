@@ -9,6 +9,7 @@ import {
   Post,
   Query,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { BookService } from './book.service';
 import { BookDto } from './dtos/book-dto';
@@ -19,7 +20,11 @@ import { Roles } from '../../common/decorators/roles.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { RoleGuard } from '../../common/guards/role/role.guard';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { ValidatePaginationInterceptor } from 'src/common/interceptors/validate-pagination/validate-pagination.interceptor';
+import { SkipValidated } from 'src/common/decorators/skip-entity.decorator';
 
+@SkipValidated(Book)
+@UseInterceptors(ValidatePaginationInterceptor)
 @Controller('api/v1/book')
 export class BookController {
   constructor(private readonly bookService: BookService) {}

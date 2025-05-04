@@ -9,6 +9,7 @@ import {
   Post,
   Query,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ReaderService } from './reader.service';
 import { ReaderDto } from './dtos/reader.dto';
@@ -19,7 +20,11 @@ import { AuthGuard } from '@nestjs/passport';
 import { RoleGuard } from '../../common/guards/role/role.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { ValidatePaginationInterceptor } from 'src/common/interceptors/validate-pagination/validate-pagination.interceptor';
+import { SkipValidated } from 'src/common/decorators/skip-entity.decorator';
 
+@SkipValidated(Reader)
+@UseInterceptors(ValidatePaginationInterceptor)
 @Controller('api/v1/reader')
 export class ReaderController {
   constructor(private readonly readerService: ReaderService) {}

@@ -19,8 +19,11 @@ import { RoleGuard } from '../../common/guards/role/role.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateAuthDto } from './dtos/update-auth.dto';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { ValidatePaginationInterceptor } from 'src/common/interceptors/validate-pagination/validate-pagination.interceptor';
+import { SkipValidated } from 'src/common/decorators/skip-entity.decorator';
 
-@UseInterceptors(ClassSerializerInterceptor)
+@SkipValidated(Auth)
+@UseInterceptors(ClassSerializerInterceptor, ValidatePaginationInterceptor)
 @Controller('api/v1/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

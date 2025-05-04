@@ -9,6 +9,7 @@ import {
   Post,
   Query,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { LoanService } from './loan.service';
 import { LoanDto } from './dtos/loan.dto';
@@ -20,7 +21,11 @@ import { AuthGuard } from '@nestjs/passport';
 import { RoleGuard } from '../../common/guards/role/role.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { ValidatePaginationInterceptor } from 'src/common/interceptors/validate-pagination/validate-pagination.interceptor';
+import { SkipValidated } from 'src/common/decorators/skip-entity.decorator';
 
+@SkipValidated(Loan)
+@UseInterceptors(ValidatePaginationInterceptor)
 @Controller('api/v1/loan')
 export class LoanController {
   constructor(private readonly loanService: LoanService) {}
