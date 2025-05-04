@@ -110,12 +110,6 @@ export class LoanService {
   }
 
   public async find(queryParams: FindLoanDto): Promise<Loan[]> {
-    if (queryParams.skip && !queryParams.limit) {
-      throw new BadRequestException(
-        'O parâmetro "limit" é obrigatório quando "skip" for utilizado.',
-      );
-    }
-
     if (
       queryParams.bookLoanDates &&
       (!queryParams.firstDate || !queryParams.lastDate)
