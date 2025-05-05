@@ -1,25 +1,47 @@
-// module.exports = {
-//   parser: '@typescript-eslint/parser',
-//   parserOptions: {
-//     project: 'tsconfig.json',
-//     tsconfigRootDir: __dirname,
-//     sourceType: 'module',
-//   },
-//   plugins: ['@typescript-eslint/eslint-plugin'],
-//   extends: [
-//     'plugin:@typescript-eslint/recommended',
-//     'plugin:prettier/recommended',
-//   ],
-//   root: true,
-//   env: {
-//     node: true,
-//     jest: true,
-//   },
-//   ignorePatterns: ['.eslintrc.js'],
-//   rules: {
-//     '@typescript-eslint/interface-name-prefix': 'off',
-//     '@typescript-eslint/explicit-function-return-type': 'off',
-//     '@typescript-eslint/explicit-module-boundary-types': 'off',
-//     '@typescript-eslint/no-explicit-any': 'off',
-//   },
-// };
+module.exports = {
+  root: true,
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: './tsconfig.json',
+    tsconfigRootDir: __dirname,
+    sourceType: 'module',
+  },
+  env: {
+    node: true,
+    jest: true,
+  },
+  plugins: ['@typescript-eslint', 'import', 'unused-imports'],
+  extends: [
+    'plugin:@typescript-eslint/recommended',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'plugin:import/typescript',
+    'plugin:prettier/recommended',
+  ],
+  ignorePatterns: ['dist/', 'node_modules/'],
+  rules: {
+    '@typescript-eslint/no-explicit-any': 'warn',
+    '@typescript-eslint/explicit-function-return-type': 'warn',
+    'import/order': ['error', { 'newlines-between': 'always' }],
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      {
+        vars: 'all',
+        args: 'after-used',
+        ignoreRestSiblings: true,
+        varsIgnorePattern: '^_',
+        argsIgnorePattern: '^_',
+      },
+    ],
+    'unused-imports/no-unused-imports': 'warn',
+    'unused-imports/no-unused-vars': [
+      'warn',
+      {
+        vars: 'all',
+        args: 'after-used',
+        ignoreRestSiblings: true,
+      },
+    ],
+  },
+};
