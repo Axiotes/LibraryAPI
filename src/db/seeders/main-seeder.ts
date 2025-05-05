@@ -1,5 +1,6 @@
 import { DataSource } from 'typeorm';
 import { runSeeder, Seeder, SeederFactoryManager } from 'typeorm-extension';
+
 import FakeReadersSeeder from './fake-readers.seed';
 import FakeBooksSeeder from './fake-books.seed';
 import FakeLoansSeerder from './fake-loans.seeder';

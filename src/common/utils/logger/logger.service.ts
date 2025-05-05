@@ -1,7 +1,9 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
 import { promises as fs } from 'fs';
-import { Logs } from '@lib-common/types/logs.type';
+
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as winston from 'winston';
+
+import { Logs } from '@lib-common/types/logs.type';
 
 @Injectable()
 export class LoggerService implements OnModuleInit {

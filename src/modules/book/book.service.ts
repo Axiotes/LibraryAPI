@@ -4,8 +4,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Book } from './book.entity';
 import { Repository } from 'typeorm';
+
+import { Book } from './book.entity';
 import { BookDto } from './dtos/book-dto';
 import { FindBookDto } from './dtos/find-book.dto';
 import { UpdateBookDto } from './dtos/update-book.dto';
@@ -66,7 +67,7 @@ export class BookService {
         ),
     };
 
-    for (let key in queryParams) {
+    for (const key in queryParams) {
       const func = verifyQueryParams[key];
       func ? func() : '';
     }

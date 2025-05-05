@@ -11,19 +11,21 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { LoanService } from './loan.service';
-import { LoanDto } from './dtos/loan.dto';
-import { Loan } from './loan.entity';
-import { Observable } from 'rxjs';
-import { FindLoanDto } from './dtos/find-loan.dto';
-import { Book } from '../book/book.entity';
 import { AuthGuard } from '@nestjs/passport';
-import { RoleGuard } from '@lib-common/guards/role/role.guard';
-import { Roles } from '@lib-common/decorators/roles.decorator';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
-import { ValidatePaginationInterceptor } from '@lib-common/interceptors/validate-pagination/validate-pagination.interceptor';
-import { SkipValidated } from '@lib-common/decorators/skip-entity.decorator';
+
+import { Book } from '../book/book.entity';
+
+import { FindLoanDto } from './dtos/find-loan.dto';
+import { Loan } from './loan.entity';
+import { LoanDto } from './dtos/loan.dto';
+import { LoanService } from './loan.service';
+
 import { ApiResponse } from '@lib-common/types/api-respose.type';
+import { SkipValidated } from '@lib-common/decorators/skip-entity.decorator';
+import { ValidatePaginationInterceptor } from '@lib-common/interceptors/validate-pagination/validate-pagination.interceptor';
+import { Roles } from '@lib-common/decorators/roles.decorator';
+import { RoleGuard } from '@lib-common/guards/role/role.guard';
 
 @SkipValidated(Loan)
 @UseInterceptors(ValidatePaginationInterceptor)

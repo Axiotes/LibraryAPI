@@ -11,18 +11,20 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { BookService } from './book.service';
-import { BookDto } from './dtos/book-dto';
-import { Book } from './book.entity';
-import { FindBookDto } from './dtos/find-book.dto';
-import { UpdateBookDto } from './dtos/update-book.dto';
-import { Roles } from '@lib-common/decorators/roles.decorator';
 import { AuthGuard } from '@nestjs/passport';
-import { RoleGuard } from '@lib-common/guards/role/role.guard';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
-import { ValidatePaginationInterceptor } from '@lib-common/interceptors/validate-pagination/validate-pagination.interceptor';
-import { SkipValidated } from '@lib-common/decorators/skip-entity.decorator';
+
+import { UpdateBookDto } from './dtos/update-book.dto';
+import { FindBookDto } from './dtos/find-book.dto';
+import { Book } from './book.entity';
+import { BookDto } from './dtos/book-dto';
+import { BookService } from './book.service';
+
 import { ApiResponse } from '@lib-common/types/api-respose.type';
+import { SkipValidated } from '@lib-common/decorators/skip-entity.decorator';
+import { ValidatePaginationInterceptor } from '@lib-common/interceptors/validate-pagination/validate-pagination.interceptor';
+import { RoleGuard } from '@lib-common/guards/role/role.guard';
+import { Roles } from '@lib-common/decorators/roles.decorator';
 
 @SkipValidated(Book)
 @UseInterceptors(ValidatePaginationInterceptor)

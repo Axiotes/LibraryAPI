@@ -1,9 +1,11 @@
+import { join } from 'path';
+
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { join } from 'path';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ReaderModule } from './modules/reader/reader.module';
 import { BookModule } from './modules/book/book.module';
 import { LoanModule } from './modules/loan/loan.module';

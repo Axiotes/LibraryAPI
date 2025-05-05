@@ -19,6 +19,13 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   ignorePatterns: ['dist/', 'node_modules/'],
+  settings: {
+    'import/resolver': {
+      typescript: {
+        project: './tsconfig.json',
+      },
+    },
+  },
   rules: {
     '@typescript-eslint/no-explicit-any': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'warn',

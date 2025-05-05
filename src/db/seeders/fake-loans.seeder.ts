@@ -1,7 +1,8 @@
 import { faker } from '@faker-js/faker';
-import { Loan } from '@lib-modules/loan/loan.entity';
 import { DataSource } from 'typeorm';
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
+
+import { Loan } from '@lib-modules/loan/loan.entity';
 import { Reader } from '@lib-modules/reader/reader.entity';
 import { Book } from '@lib-modules/book/book.entity';
 

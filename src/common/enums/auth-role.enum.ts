@@ -1,4 +1,4 @@
 export enum AuthRoleEnum {
-    EMPLOYEE = 'employee',
-    ADMIN = 'admin'
+  EMPLOYEE = 'employee',
+  ADMIN = 'admin',
 }

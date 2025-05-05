@@ -1,7 +1,8 @@
 import { faker } from '@faker-js/faker';
-import { Auth } from '@lib-modules/auth/auth.entity';
 import { DataSource } from 'typeorm';
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
+
+import { Auth } from '@lib-modules/auth/auth.entity';
 import { AuthRoleEnum } from '@lib-common/enums/auth-role.enum';
 
 export default class FakeAuthSeeders implements Seeder {
