@@ -135,15 +135,6 @@ export class LoanService {
           returned: queryParams.returned ? 1 : 0,
         }),
       bookLoanDates: () => {
-        if (
-          (queryParams.firstDate && !queryParams.lastDate) ||
-          (!queryParams.firstDate && queryParams.lastDate)
-        ) {
-          throw new BadRequestException(
-            'Os parâmetros "firstDate" e "lastDate" devem ser usados em conjunto',
-          );
-        }
-
         query.andWhere(
           `loan.${queryParams.bookLoanDates} BETWEEN :firstDate AND :lastDate`,
           {
