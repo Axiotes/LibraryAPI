@@ -1,8 +1,8 @@
 export type Logs = {
   method: string;
   url: string;
-  params: any;
-  body: any;
+  params: unknown;
+  body: unknown;
   executionTime: string;
   statusCode: number;
   error?: {

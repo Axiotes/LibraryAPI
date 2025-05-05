@@ -1,4 +1,3 @@
-import { AuthRoleEnum } from '../../common/enums/auth-role.enum';
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -8,6 +7,8 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { Exclude } from 'class-transformer';
+
+import { AuthRoleEnum } from '@lib-common/enums/auth-role.enum';
 
 @Entity()
 export class Auth {
@@ -29,7 +30,7 @@ export class Auth {
 
   @BeforeInsert()
   @BeforeUpdate()
-  public async hashPassword() {
+  public async hashPassword(): Promise<void> {
     this.password = await bcrypt.hash(this.password, 10);
   }
 }

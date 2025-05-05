@@ -5,13 +5,14 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { catchError, Observable, throwError } from 'rxjs';
+
 import { LoggerService } from '../..//utils/logger/logger.service';
 
 @Injectable()
 export class ErrorInterceptor implements NestInterceptor {
   constructor(private readonly loggerService: LoggerService) {}
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const req = context.switchToHttp().getRequest();
     const initializeTime = new Date().getTime();
 

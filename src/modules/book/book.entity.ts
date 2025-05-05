@@ -1,5 +1,6 @@
-import { Loan } from '../loan/loan.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+
+import { Loan } from '../loan/loan.entity';
 
 @Entity()
 export class Book {
@@ -22,7 +23,7 @@ export class Book {
   yearPublication: Date;
 
   @Column()
-  stock: number
+  stock: number;
 
   @OneToMany(() => Loan, (loan) => loan.id)
   loan: Loan;

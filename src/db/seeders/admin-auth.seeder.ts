@@ -1,16 +1,17 @@
-import { Auth } from '../../modules/auth/auth.entity';
-import { DataSource } from 'typeorm';
-import { Seeder, SeederFactoryManager } from 'typeorm-extension';
-import { AuthRoleEnum } from '../../common/enums/auth-role.enum';
 import 'dotenv/config';
 import * as dotenv from 'dotenv';
+import { DataSource } from 'typeorm';
+import { Seeder, SeederFactoryManager } from 'typeorm-extension';
+
+import { Auth } from '@lib-modules/auth/auth.entity';
+import { AuthRoleEnum } from '@lib-common/enums/auth-role.enum';
 
 dotenv.config();
 
 export default class AdminAuthSeeders implements Seeder {
   public async run(
     dataSource: DataSource,
-    factoryManager: SeederFactoryManager,
+    _factoryManager: SeederFactoryManager,
   ): Promise<void> {
     const repository = dataSource.getRepository(Auth);
 

@@ -1,5 +1,6 @@
-import { Loan } from '../loan/loan.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+
+import { Loan } from '../loan/loan.entity';
 
 @Entity()
 export class Reader {

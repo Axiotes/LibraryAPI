@@ -11,18 +11,20 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ReaderService } from './reader.service';
-import { ReaderDto } from './dtos/reader.dto';
-import { Reader } from './reader.entity';
-import { UpdateReaderDto } from './dtos/update-reader.dto';
-import { FindReadersDto } from './dtos/find-readers.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { RoleGuard } from '../../common/guards/role/role.guard';
-import { Roles } from '../../common/decorators/roles.decorator';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
-import { ValidatePaginationInterceptor } from 'src/common/interceptors/validate-pagination/validate-pagination.interceptor';
-import { SkipValidated } from 'src/common/decorators/skip-entity.decorator';
-import { ApiResponse } from 'src/common/types/api-respose.type';
+
+import { FindReadersDto } from './dtos/find-readers.dto';
+import { UpdateReaderDto } from './dtos/update-reader.dto';
+import { Reader } from './reader.entity';
+import { ReaderDto } from './dtos/reader.dto';
+import { ReaderService } from './reader.service';
+
+import { ApiResponse } from '@lib-common/types/api-respose.type';
+import { SkipValidated } from '@lib-common/decorators/skip-entity.decorator';
+import { ValidatePaginationInterceptor } from '@lib-common/interceptors/validate-pagination/validate-pagination.interceptor';
+import { Roles } from '@lib-common/decorators/roles.decorator';
+import { RoleGuard } from '@lib-common/guards/role/role.guard';
 
 @SkipValidated(Reader)
 @UseInterceptors(ValidatePaginationInterceptor)

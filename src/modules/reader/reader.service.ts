@@ -1,12 +1,12 @@
 import {
-  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Reader } from './reader.entity';
 import { Repository } from 'typeorm';
+
+import { Reader } from './reader.entity';
 import { ReaderDto } from './dtos/reader.dto';
 import { UpdateReaderDto } from './dtos/update-reader.dto';
 import { FindReadersDto } from './dtos/find-readers.dto';

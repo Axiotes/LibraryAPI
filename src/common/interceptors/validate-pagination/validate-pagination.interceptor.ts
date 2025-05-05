@@ -19,7 +19,7 @@ export class ValidatePaginationInterceptor implements NestInterceptor {
   async intercept(
     context: ExecutionContext,
     next: CallHandler,
-  ): Promise<Observable<any>> {
+  ): Promise<Observable<unknown>> {
     const entity = this.reflector.get('skip_entity', context.getClass());
     const request = context.switchToHttp().getRequest();
     const { limit, skip } = request.query;

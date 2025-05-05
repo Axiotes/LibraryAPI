@@ -1,12 +1,13 @@
 import { faker } from '@faker-js/faker';
-import { Reader } from '../../modules/reader/reader.entity';
 import { DataSource } from 'typeorm';
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
+
+import { Reader } from '@lib-modules/reader/reader.entity';
 
 export default class FakeReadersSeeder implements Seeder {
   public async run(
     dataSource: DataSource,
-    factoryManager: SeederFactoryManager,
+    _factoryManager: SeederFactoryManager,
   ): Promise<void> {
     const repository = dataSource.getRepository(Reader);
 

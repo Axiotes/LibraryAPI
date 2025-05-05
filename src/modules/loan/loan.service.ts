@@ -5,14 +5,16 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Loan } from './loan.entity';
 import { Repository } from 'typeorm';
+import { throwError } from 'rxjs';
+
 import { ReaderService } from '../reader/reader.service';
 import { BookService } from '../book/book.service';
-import { LoanDto } from './dtos/loan.dto';
-import { Observable, throwError } from 'rxjs';
-import { FindLoanDto } from './dtos/find-loan.dto';
 import { Book } from '../book/book.entity';
+
+import { Loan } from './loan.entity';
+import { LoanDto } from './dtos/loan.dto';
+import { FindLoanDto } from './dtos/find-loan.dto';
 
 @Injectable()
 export class LoanService {
@@ -145,9 +147,12 @@ export class LoanService {
       },
     };
 
-    for (let key in queryParams) {
+    for (const key in queryParams) {
       const func = verifyQueryParams[key];
-      func ? func() : '';
+
+      if (func) {
+        func();
+      }
     }
 
     query
@@ -160,7 +165,7 @@ export class LoanService {
     return await query.getMany();
   }
 
-  public async returnBook(loanId: number) {
+  public async returnBook(loanId: number): Promise<Loan> {
     const loan = await this.findOne(loanId);
 
     if (loan.returned) {
