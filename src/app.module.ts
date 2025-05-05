@@ -8,6 +8,7 @@ import { ReaderModule } from './modules/reader/reader.module';
 import { BookModule } from './modules/book/book.module';
 import { LoanModule } from './modules/loan/loan.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { UtilsModule } from './common/utils/utils.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { AuthModule } from './modules/auth/auth.module';
     BookModule,
     LoanModule,
     AuthModule,
+    UtilsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
