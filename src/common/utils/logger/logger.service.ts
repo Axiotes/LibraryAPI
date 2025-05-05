@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { promises as fs } from 'fs';
-import { Logs } from '../../../common/types/logs.type';
+import { Logs } from '@lib-common/types/logs.type';
 import * as winston from 'winston';
 
 @Injectable()

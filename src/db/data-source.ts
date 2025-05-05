@@ -1,10 +1,10 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { SeederOptions } from 'typeorm-extension';
 import { MainSeeder } from './seeders/main-seeder';
-import { Reader } from '../modules/reader/reader.entity';
-import { Loan } from '../modules/loan/loan.entity';
-import { Book } from '../modules/book/book.entity';
-import { Auth } from '../modules/auth/auth.entity';
+import { Reader } from '@lib-modules/reader/reader.entity';
+import { Loan } from '@lib-modules/loan/loan.entity';
+import { Book } from '@lib-modules/book/book.entity';
+import { Auth } from '@lib-modules/auth/auth.entity';
 import * as dotenv from 'dotenv';
 
 dotenv.config();

@@ -1,4 +1,4 @@
-import { AuthRoleEnum } from '../../common/enums/auth-role.enum';
+import { AuthRoleEnum } from '@lib-common/enums/auth-role.enum';
 import {
   BeforeInsert,
   BeforeUpdate,

@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { Reader } from '../../modules/reader/reader.entity';
+import { Reader } from '@lib-modules/reader/reader.entity';
 import { DataSource } from 'typeorm';
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 

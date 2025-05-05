@@ -18,12 +18,12 @@ import { Observable } from 'rxjs';
 import { FindLoanDto } from './dtos/find-loan.dto';
 import { Book } from '../book/book.entity';
 import { AuthGuard } from '@nestjs/passport';
-import { RoleGuard } from '../../common/guards/role/role.guard';
-import { Roles } from '../../common/decorators/roles.decorator';
+import { RoleGuard } from '@lib-common/guards/role/role.guard';
+import { Roles } from '@lib-common/decorators/roles.decorator';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
-import { ValidatePaginationInterceptor } from 'src/common/interceptors/validate-pagination/validate-pagination.interceptor';
-import { SkipValidated } from 'src/common/decorators/skip-entity.decorator';
-import { ApiResponse } from 'src/common/types/api-respose.type';
+import { ValidatePaginationInterceptor } from '@lib-common/interceptors/validate-pagination/validate-pagination.interceptor';
+import { SkipValidated } from '@lib-common/decorators/skip-entity.decorator';
+import { ApiResponse } from '@lib-common/types/api-respose.type';
 
 @SkipValidated(Loan)
 @UseInterceptors(ValidatePaginationInterceptor)

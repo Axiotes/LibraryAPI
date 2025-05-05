@@ -16,13 +16,13 @@ import { BookDto } from './dtos/book-dto';
 import { Book } from './book.entity';
 import { FindBookDto } from './dtos/find-book.dto';
 import { UpdateBookDto } from './dtos/update-book.dto';
-import { Roles } from '../../common/decorators/roles.decorator';
+import { Roles } from '@lib-common/decorators/roles.decorator';
 import { AuthGuard } from '@nestjs/passport';
-import { RoleGuard } from '../../common/guards/role/role.guard';
+import { RoleGuard } from '@lib-common/guards/role/role.guard';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
-import { ValidatePaginationInterceptor } from 'src/common/interceptors/validate-pagination/validate-pagination.interceptor';
-import { SkipValidated } from 'src/common/decorators/skip-entity.decorator';
-import { ApiResponse } from 'src/common/types/api-respose.type';
+import { ValidatePaginationInterceptor } from '@lib-common/interceptors/validate-pagination/validate-pagination.interceptor';
+import { SkipValidated } from '@lib-common/decorators/skip-entity.decorator';
+import { ApiResponse } from '@lib-common/types/api-respose.type';
 
 @SkipValidated(Book)
 @UseInterceptors(ValidatePaginationInterceptor)

@@ -1,5 +1,19 @@
 {
   "compilerOptions": {
+    "paths": {
+      "@lib-api/*": [
+        "src/*"
+      ],
+      "@lib-modules/*": [
+        "src/modules/*"
+      ],
+      "@lib-common/*": [
+        "src/common/*"
+      ],
+      "@lib-db/*": [
+        "src/db/*"
+      ]
+    },
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
