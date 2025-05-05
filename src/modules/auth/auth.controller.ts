@@ -25,7 +25,7 @@ import { ApiResponse } from 'src/common/types/api-respose.type';
 
 @SkipValidated(Auth)
 @UseInterceptors(ClassSerializerInterceptor, ValidatePaginationInterceptor)
-@Controller('api/v1/auth')
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 

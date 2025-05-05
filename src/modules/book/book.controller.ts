@@ -26,7 +26,7 @@ import { ApiResponse } from 'src/common/types/api-respose.type';
 
 @SkipValidated(Book)
 @UseInterceptors(ValidatePaginationInterceptor)
-@Controller('api/v1/book')
+@Controller('book')
 export class BookController {
   constructor(private readonly bookService: BookService) {}
 

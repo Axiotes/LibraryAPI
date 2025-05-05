@@ -27,7 +27,7 @@ import { ApiResponse } from 'src/common/types/api-respose.type';
 
 @SkipValidated(Loan)
 @UseInterceptors(ValidatePaginationInterceptor)
-@Controller('api/v1/loan')
+@Controller('loan')
 export class LoanController {
   constructor(private readonly loanService: LoanService) {}
 
