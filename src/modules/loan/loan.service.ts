@@ -22,7 +22,7 @@ export class LoanService {
     private readonly bookService: BookService,
   ) {}
 
-  public async create(loanDto: LoanDto): Promise<Loan[] | Observable<never>> {
+  public async create(loanDto: LoanDto): Promise<Loan[]> {
     const reader = await this.readerService.findBy<'cpf'>(
       'cpf',
       loanDto.readerCpf,
@@ -91,7 +91,7 @@ export class LoanService {
       return newLoans;
     } catch (err) {
       await queryRunner.rollbackTransaction();
-      return throwError(() => err);
+      throwError(() => err);
     } finally {
       await queryRunner.release();
     }
@@ -176,7 +176,7 @@ export class LoanService {
     return await this.loanRepository.save(returnedLoan);
   }
 
-  public async topFiveBooks() {
+  public async topFiveBooks(): Promise<Loan[]> {
     return await this.loanRepository
       .createQueryBuilder('loan')
       .leftJoin('loan.book', 'book')

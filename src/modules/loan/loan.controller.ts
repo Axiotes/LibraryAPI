@@ -23,6 +23,7 @@ import { Roles } from '../../common/decorators/roles.decorator';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { ValidatePaginationInterceptor } from 'src/common/interceptors/validate-pagination/validate-pagination.interceptor';
 import { SkipValidated } from 'src/common/decorators/skip-entity.decorator';
+import { ApiResponse } from 'src/common/types/api-respose.type';
 
 @SkipValidated(Loan)
 @UseInterceptors(ValidatePaginationInterceptor)
@@ -39,10 +40,12 @@ export class LoanController {
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
   @Post('')
-  public async create(
-    @Body() body: LoanDto,
-  ): Promise<Loan[] | Observable<never>> {
-    return this.loanService.create(body);
+  public async create(@Body() body: LoanDto): Promise<ApiResponse<Loan[]>> {
+    const loans = await this.loanService.create(body);
+
+    return {
+      data: loans,
+    };
   }
 
   @ApiOperation({
@@ -50,8 +53,13 @@ export class LoanController {
     description: 'Qualquer usuário pode utlizar este endpoint',
   })
   @Get('top-five-books')
-  public async popularBooks() {
-    return await this.loanService.topFiveBooks();
+  public async popularBooks(): Promise<ApiResponse<Loan[]>> {
+    const topFive = await this.loanService.topFiveBooks();
+
+    return {
+      data: topFive,
+      total: topFive.length,
+    };
   }
 
   @ApiOperation({
@@ -63,8 +71,17 @@ export class LoanController {
     (loanDate: Data do empréstimos, limitReturnDate: Data limite para devolução, returnedDate: Data de devolução)`,
   })
   @Get('')
-  public async find(@Query() query: FindLoanDto): Promise<Loan[]> {
-    return this.loanService.find(query);
+  public async find(@Query() query: FindLoanDto): Promise<ApiResponse<Loan[]>> {
+    const loans = await this.loanService.find(query);
+
+    return {
+      data: loans,
+      pagination: {
+        skip: query.skip,
+        limit: query.limit,
+      },
+      total: loans.length,
+    };
   }
 
   @ApiOperation({
@@ -72,8 +89,14 @@ export class LoanController {
     description: 'Qualquer usuário pode utlizar este endpoint',
   })
   @Get(':id')
-  public async findOne(@Param('id', ParseIntPipe) id: number): Promise<Loan> {
-    return await this.loanService.findOne(id);
+  public async findOne(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ApiResponse<Loan>> {
+    const loan = await this.loanService.findOne(id);
+
+    return {
+      data: loan,
+    };
   }
 
   @ApiOperation({
@@ -83,8 +106,12 @@ export class LoanController {
   @Get('book/:bookId')
   public async bookAvailabilty(
     @Param('bookId', ParseIntPipe) bookId: number,
-  ): Promise<{ book: Book; available: number }> {
-    return this.loanService.bookAvailability(bookId);
+  ): Promise<ApiResponse<{ book: Book; available: number }>> {
+    const bookStock = await this.loanService.bookAvailability(bookId);
+
+    return {
+      data: bookStock,
+    };
   }
 
   @ApiBearerAuth()
@@ -98,8 +125,12 @@ export class LoanController {
   @Patch(':id')
   public async returnBook(
     @Param('id', ParseIntPipe) id: number,
-  ): Promise<Loan> {
-    return await this.loanService.returnBook(id);
+  ): Promise<ApiResponse<Loan>> {
+    const loan = await this.loanService.returnBook(id);
+
+    return {
+      data: loan,
+    };
   }
 
   @ApiBearerAuth()
@@ -111,7 +142,13 @@ export class LoanController {
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin')
   @Delete(':id')
-  public async delete(@Param('id', ParseIntPipe) id: number) {
-    return await this.loanService.delete(id);
+  public async delete(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ApiResponse<string>> {
+    const deleted = await this.loanService.delete(id);
+
+    return {
+      data: deleted.message,
+    };
   }
 }
