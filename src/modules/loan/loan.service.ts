@@ -50,13 +50,11 @@ export class LoanService {
       this.loanRepository.manager.connection.createQueryRunner();
 
     await queryRunner.startTransaction();
-    let newLoans: Loan[] = [];
 
     try {
       let lastBookId: number;
 
-      for (let i = 0; i < loanDto.bookIds.length; i++) {
-        const bookId = loanDto.bookIds[i];
+      const loansPromisses = loanDto.bookIds.map(async (bookId) => {
         const { book, available } = await this.bookAvailability(bookId);
 
         if (available === 0) {
@@ -83,8 +81,11 @@ export class LoanService {
           reader,
           book,
         });
-        newLoans.push(await queryRunner.manager.getRepository(Loan).save(loan));
-      }
+
+        return await queryRunner.manager.getRepository(Loan).save(loan);
+      });
+
+      const newLoans: Loan[] = await Promise.all(loansPromisses);
 
       await queryRunner.commitTransaction();
       return newLoans;
