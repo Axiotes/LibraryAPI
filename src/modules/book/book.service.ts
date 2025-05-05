@@ -32,12 +32,6 @@ export class BookService {
   }
 
   public async find(queryParams: FindBookDto) {
-    if (queryParams.skip && !queryParams.limit) {
-      throw new BadRequestException(
-        'O parâmetro "limit" é obrigatório quando "skip" for utilizado.',
-      );
-    }
-
     if (
       (queryParams.firstDate && !queryParams.lastDate) ||
       (!queryParams.firstDate && queryParams.lastDate)

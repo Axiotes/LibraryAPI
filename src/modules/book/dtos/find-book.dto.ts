@@ -6,6 +6,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  Min,
 } from 'class-validator';
 
 export class FindBookDto {
@@ -13,12 +14,14 @@ export class FindBookDto {
   @IsOptional()
   @Transform(({ value }) => parseInt(value))
   @IsNumber()
+  @Min(0)
   skip: number;
 
   @ApiPropertyOptional({ description: "Número de livros que serão retornados" })
   @IsOptional()
   @Transform(({ value }) => parseInt(value))
   @IsNumber()
+  @Min(1)
   limit: number;
 
   @ApiPropertyOptional({ description: "Ordenação dos livros retornados (ASC ou DESC)" })

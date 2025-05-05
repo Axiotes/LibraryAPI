@@ -9,18 +9,24 @@ import {
   Post,
   Query,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { BookService } from './book.service';
 import { BookDto } from './dtos/book-dto';
 import { Book } from './book.entity';
 import { FindBookDto } from './dtos/find-book.dto';
 import { UpdateBookDto } from './dtos/update-book.dto';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Roles } from '../../common/decorators/roles.decorator';
 import { AuthGuard } from '@nestjs/passport';
-import { RoleGuard } from 'src/auth/guards/role/role.guard';
+import { RoleGuard } from '../../common/guards/role/role.guard';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { ValidatePaginationInterceptor } from 'src/common/interceptors/validate-pagination/validate-pagination.interceptor';
+import { SkipValidated } from 'src/common/decorators/skip-entity.decorator';
+import { ApiResponse } from 'src/common/types/api-respose.type';
 
-@Controller('api/v1/book')
+@SkipValidated(Book)
+@UseInterceptors(ValidatePaginationInterceptor)
+@Controller('book')
 export class BookController {
   constructor(private readonly bookService: BookService) {}
 
@@ -33,8 +39,12 @@ export class BookController {
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
   @Post()
-  public async create(@Body() body: BookDto): Promise<Book> {
-    return await this.bookService.create(body);
+  public async create(@Body() body: BookDto): Promise<ApiResponse<Book>> {
+    const book = await this.bookService.create(body);
+
+    return {
+      data: book,
+    };
   }
 
   @ApiOperation({
@@ -42,8 +52,14 @@ export class BookController {
     description: 'Qualquer usuário pode utilizar este endpoint',
   })
   @Get(':id')
-  public async findOne(@Param('id', ParseIntPipe) id: number): Promise<Book> {
-    return await this.bookService.findOne(id);
+  public async findOne(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ApiResponse<Book>> {
+    const book = await this.bookService.findOne(id);
+
+    return {
+      data: book,
+    };
   }
 
   @ApiOperation({
@@ -53,8 +69,17 @@ export class BookController {
     Para os query params de data publicação também é necessário utiliza-los em conjunto`,
   })
   @Get()
-  public async find(@Query() query: FindBookDto) {
-    return await this.bookService.find(query);
+  public async find(@Query() query: FindBookDto): Promise<ApiResponse<Book[]>> {
+    const books = await this.bookService.find(query);
+
+    return {
+      data: books,
+      pagination: {
+        skip: query.skip,
+        limit: query.limit,
+      },
+      total: books.length,
+    };
   }
 
   @ApiBearerAuth()
@@ -69,8 +94,12 @@ export class BookController {
   public async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() body: UpdateBookDto,
-  ) {
-    return await this.bookService.update(id, body);
+  ): Promise<ApiResponse<Book>> {
+    const book = await this.bookService.update(id, body);
+
+    return {
+      data: book,
+    };
   }
 
   @ApiBearerAuth()
@@ -82,7 +111,13 @@ export class BookController {
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin')
   @Delete(':id')
-  public async delete(@Param('id', ParseIntPipe) id: number) {
-    return await this.bookService.delete(id);
+  public async delete(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ApiResponse<string>> {
+    const deleted = await this.bookService.delete(id);
+
+    return {
+      data: deleted.message,
+    };
   }
 }

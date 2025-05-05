@@ -14,14 +14,18 @@ import { AuthService } from './auth.service';
 import { AuthDto } from './dtos/auth.dto';
 import { Auth } from './auth.entity';
 import { SignInDto } from './dtos/sign-in.dto';
-import { Roles } from './decorators/roles.decorator';
-import { RoleGuard } from './guards/role/role.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { RoleGuard } from '../../common/guards/role/role.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateAuthDto } from './dtos/update-auth.dto';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { ValidatePaginationInterceptor } from 'src/common/interceptors/validate-pagination/validate-pagination.interceptor';
+import { SkipValidated } from 'src/common/decorators/skip-entity.decorator';
+import { ApiResponse } from 'src/common/types/api-respose.type';
 
-@UseInterceptors(ClassSerializerInterceptor)
-@Controller('api/v1/auth')
+@SkipValidated(Auth)
+@UseInterceptors(ClassSerializerInterceptor, ValidatePaginationInterceptor)
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -36,8 +40,12 @@ export class AuthController {
   @Post('sign-up')
   public async create(
     @Body() body: AuthDto,
-  ): Promise<{ token: string; authUser: Auth }> {
-    return await this.authService.create(body);
+  ): Promise<ApiResponse<{ token: string; authUser: Auth }>> {
+    const authUser = await this.authService.create(body);
+
+    return {
+      data: authUser,
+    };
   }
 
   @ApiOperation({
@@ -45,8 +53,14 @@ export class AuthController {
     description: 'Qualquer usuário pode realizar essa ação',
   })
   @Post('sign-in')
-  public async signIn(@Body() body: SignInDto): Promise<{ token: string }> {
-    return await this.authService.signIn(body);
+  public async signIn(
+    @Body() body: SignInDto,
+  ): Promise<ApiResponse<{ token: string }>> {
+    const token = await this.authService.signIn(body);
+
+    return {
+      data: token,
+    };
   }
 
   @ApiBearerAuth()
@@ -58,8 +72,14 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin')
   @Get(':id')
-  public async findOne(@Param('id', ParseIntPipe) id: number): Promise<Auth> {
-    return await this.authService.findOne(id);
+  public async findOne(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ApiResponse<Auth>> {
+    const auth = await this.authService.findOne(id);
+
+    return {
+      data: auth,
+    };
   }
 
   @ApiBearerAuth()
@@ -71,8 +91,12 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin')
   @Get()
-  public async find(): Promise<Auth[]> {
-    return await this.authService.find();
+  public async find(): Promise<ApiResponse<Auth[]>> {
+    const auths = await this.authService.find();
+
+    return {
+      data: auths,
+    };
   }
 
   @ApiBearerAuth()
@@ -84,7 +108,11 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
   @Patch()
-  public async update(@Body() body: UpdateAuthDto): Promise<Auth> {
-    return await this.authService.update(body);
+  public async update(@Body() body: UpdateAuthDto): Promise<ApiResponse<Auth>> {
+    const auth = await this.authService.update(body);
+
+    return {
+      data: auth,
+    };
   }
 }

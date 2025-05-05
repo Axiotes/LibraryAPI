@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { Book } from '../../book/book.entity';
+import { Book } from '../../modules/book/book.entity';
 import { DataSource } from 'typeorm';
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 

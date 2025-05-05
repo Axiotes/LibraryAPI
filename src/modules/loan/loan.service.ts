@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Loan } from './loan.entity';
 import { Repository } from 'typeorm';
 import { ReaderService } from '../reader/reader.service';
-import { BookService } from 'src/book/book.service';
+import { BookService } from '../book/book.service';
 import { LoanDto } from './dtos/loan.dto';
 import { Observable, throwError } from 'rxjs';
 import { FindLoanDto } from './dtos/find-loan.dto';
@@ -22,7 +22,7 @@ export class LoanService {
     private readonly bookService: BookService,
   ) {}
 
-  public async create(loanDto: LoanDto): Promise<Loan[] | Observable<never>> {
+  public async create(loanDto: LoanDto): Promise<Loan[]> {
     const reader = await this.readerService.findBy<'cpf'>(
       'cpf',
       loanDto.readerCpf,
@@ -50,13 +50,11 @@ export class LoanService {
       this.loanRepository.manager.connection.createQueryRunner();
 
     await queryRunner.startTransaction();
-    let newLoans: Loan[] = [];
 
     try {
       let lastBookId: number;
 
-      for (let i = 0; i < loanDto.bookIds.length; i++) {
-        const bookId = loanDto.bookIds[i];
+      const loansPromisses = loanDto.bookIds.map(async (bookId) => {
         const { book, available } = await this.bookAvailability(bookId);
 
         if (available === 0) {
@@ -83,14 +81,17 @@ export class LoanService {
           reader,
           book,
         });
-        newLoans.push(await queryRunner.manager.getRepository(Loan).save(loan));
-      }
+
+        return await queryRunner.manager.getRepository(Loan).save(loan);
+      });
+
+      const newLoans: Loan[] = await Promise.all(loansPromisses);
 
       await queryRunner.commitTransaction();
       return newLoans;
     } catch (err) {
       await queryRunner.rollbackTransaction();
-      return throwError(() => err);
+      throwError(() => err);
     } finally {
       await queryRunner.release();
     }
@@ -110,12 +111,6 @@ export class LoanService {
   }
 
   public async find(queryParams: FindLoanDto): Promise<Loan[]> {
-    if (queryParams.skip && !queryParams.limit) {
-      throw new BadRequestException(
-        'O parâmetro "limit" é obrigatório quando "skip" for utilizado.',
-      );
-    }
-
     if (
       queryParams.bookLoanDates &&
       (!queryParams.firstDate || !queryParams.lastDate)
@@ -140,15 +135,6 @@ export class LoanService {
           returned: queryParams.returned ? 1 : 0,
         }),
       bookLoanDates: () => {
-        if (
-          (queryParams.firstDate && !queryParams.lastDate) ||
-          (!queryParams.firstDate && queryParams.lastDate)
-        ) {
-          throw new BadRequestException(
-            'Os parâmetros "firstDate" e "lastDate" devem ser usados em conjunto',
-          );
-        }
-
         query.andWhere(
           `loan.${queryParams.bookLoanDates} BETWEEN :firstDate AND :lastDate`,
           {
@@ -190,7 +176,7 @@ export class LoanService {
     return await this.loanRepository.save(returnedLoan);
   }
 
-  public async topFiveBooks() {
+  public async topFiveBooks(): Promise<Loan[]> {
     return await this.loanRepository
       .createQueryBuilder('loan')
       .leftJoin('loan.book', 'book')

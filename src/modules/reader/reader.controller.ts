@@ -9,6 +9,7 @@ import {
   Post,
   Query,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ReaderService } from './reader.service';
 import { ReaderDto } from './dtos/reader.dto';
@@ -16,11 +17,16 @@ import { Reader } from './reader.entity';
 import { UpdateReaderDto } from './dtos/update-reader.dto';
 import { FindReadersDto } from './dtos/find-readers.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { RoleGuard } from 'src/auth/guards/role/role.guard';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { RoleGuard } from '../../common/guards/role/role.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { ValidatePaginationInterceptor } from 'src/common/interceptors/validate-pagination/validate-pagination.interceptor';
+import { SkipValidated } from 'src/common/decorators/skip-entity.decorator';
+import { ApiResponse } from 'src/common/types/api-respose.type';
 
-@Controller('api/v1/reader')
+@SkipValidated(Reader)
+@UseInterceptors(ValidatePaginationInterceptor)
+@Controller('reader')
 export class ReaderController {
   constructor(private readonly readerService: ReaderService) {}
 
@@ -33,8 +39,12 @@ export class ReaderController {
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
   @Post()
-  public async create(@Body() body: ReaderDto): Promise<Reader> {
-    return await this.readerService.create(body);
+  public async create(@Body() body: ReaderDto): Promise<ApiResponse<Reader>> {
+    const reader = await this.readerService.create(body);
+
+    return {
+      data: reader,
+    };
   }
 
   @ApiBearerAuth()
@@ -46,8 +56,19 @@ export class ReaderController {
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
   @Get()
-  public async findAll(@Query() query: FindReadersDto): Promise<Reader[]> {
-    return await this.readerService.findAll(query);
+  public async findAll(
+    @Query() query: FindReadersDto,
+  ): Promise<ApiResponse<Reader[]>> {
+    const readers = await this.readerService.findAll(query);
+
+    return {
+      data: readers,
+      pagination: {
+        skip: query.skip,
+        limit: query.limit,
+      },
+      total: readers.length,
+    };
   }
 
   @ApiBearerAuth()
@@ -61,8 +82,12 @@ export class ReaderController {
   @Get('id/:id')
   public async findById(
     @Param('id', ParseIntPipe) id: number,
-  ): Promise<Reader> {
-    return this.readerService.findBy<'id'>('id', id);
+  ): Promise<ApiResponse<Reader>> {
+    const reader = await this.readerService.findBy<'id'>('id', id);
+
+    return {
+      data: reader,
+    };
   }
 
   @ApiBearerAuth()
@@ -90,8 +115,12 @@ export class ReaderController {
   public async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() body: UpdateReaderDto,
-  ): Promise<Reader> {
-    return await this.readerService.update(id, body);
+  ): Promise<ApiResponse<Reader>> {
+    const reader = await this.readerService.update(id, body);
+
+    return {
+      data: reader,
+    };
   }
 
   @ApiBearerAuth()
@@ -103,7 +132,13 @@ export class ReaderController {
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin')
   @Delete(':id')
-  public async delete(@Param('id', ParseIntPipe) id: number) {
-    return await this.readerService.delete(id);
+  public async delete(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ApiResponse<string>> {
+    const deleted = await this.readerService.delete(id);
+
+    return {
+      data: deleted.message,
+    };
   }
 }
