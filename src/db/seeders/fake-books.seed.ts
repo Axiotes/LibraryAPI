@@ -7,7 +7,7 @@ import { Book } from '@lib-modules/book/book.entity';
 export default class FakeBooksSeeder implements Seeder {
   public async run(
     dataSource: DataSource,
-    factoryManager: SeederFactoryManager,
+    _factoryManager: SeederFactoryManager,
   ): Promise<void> {
     const repository = dataSource.getRepository(Book);
 

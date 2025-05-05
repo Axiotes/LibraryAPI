@@ -8,7 +8,7 @@ import { AuthRoleEnum } from '@lib-common/enums/auth-role.enum';
 export default class FakeAuthSeeders implements Seeder {
   public async run(
     dataSource: DataSource,
-    factoryManager: SeederFactoryManager,
+    _factoryManager: SeederFactoryManager,
   ): Promise<void> {
     const repository = dataSource.getRepository(Auth);
 

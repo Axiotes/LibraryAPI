@@ -7,7 +7,7 @@ import { Reader } from '@lib-modules/reader/reader.entity';
 export default class FakeReadersSeeder implements Seeder {
   public async run(
     dataSource: DataSource,
-    factoryManager: SeederFactoryManager,
+    _factoryManager: SeederFactoryManager,
   ): Promise<void> {
     const repository = dataSource.getRepository(Reader);
 

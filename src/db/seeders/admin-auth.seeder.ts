@@ -11,7 +11,7 @@ dotenv.config();
 export default class AdminAuthSeeders implements Seeder {
   public async run(
     dataSource: DataSource,
-    factoryManager: SeederFactoryManager,
+    _factoryManager: SeederFactoryManager,
   ): Promise<void> {
     const repository = dataSource.getRepository(Auth);
 

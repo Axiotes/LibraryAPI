@@ -10,7 +10,7 @@ import AdminAuthSeeders from './admin-auth.seeder';
 export class MainSeeder implements Seeder {
   public async run(
     dataSource: DataSource,
-    factoryManager: SeederFactoryManager,
+    _factoryManager: SeederFactoryManager,
   ): Promise<void> {
     await runSeeder(dataSource, AdminAuthSeeders);
 

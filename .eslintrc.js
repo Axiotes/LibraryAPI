@@ -42,13 +42,6 @@ module.exports = {
       },
     ],
     'unused-imports/no-unused-imports': 'warn',
-    'unused-imports/no-unused-vars': [
-      'warn',
-      {
-        vars: 'all',
-        args: 'after-used',
-        ignoreRestSiblings: true,
-      },
-    ],
+    'unused-imports/no-unused-vars': 'off'
   },
 };

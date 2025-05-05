@@ -165,7 +165,7 @@ export class LoanService {
     return await query.getMany();
   }
 
-  public async returnBook(loanId: number) {
+  public async returnBook(loanId: number): Promise<Loan> {
     const loan = await this.findOne(loanId);
 
     if (loan.returned) {

@@ -30,7 +30,7 @@ export class Auth {
 
   @BeforeInsert()
   @BeforeUpdate()
-  public async hashPassword() {
+  public async hashPassword(): Promise<void> {
     this.password = await bcrypt.hash(this.password, 10);
   }
 }

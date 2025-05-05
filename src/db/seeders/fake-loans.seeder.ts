@@ -9,7 +9,7 @@ import { Book } from '@lib-modules/book/book.entity';
 export default class FakeLoansSeerder implements Seeder {
   public async run(
     dataSource: DataSource,
-    factoryManager: SeederFactoryManager,
+    _factoryManager: SeederFactoryManager,
   ): Promise<void> {
     const loanRepository = dataSource.getRepository(Loan);
     const readerRepository = dataSource.getRepository(Reader);

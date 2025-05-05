@@ -41,7 +41,7 @@ export class LoggerService implements OnModuleInit {
   private async verifyDirectory(): Promise<void> {
     try {
       await fs.access('./logs');
-    } catch (error) {
+    } catch {
       await fs.mkdir('./logs', { recursive: true });
     }
   }
@@ -49,7 +49,7 @@ export class LoggerService implements OnModuleInit {
   private async verifyFiles(filePath: string): Promise<void> {
     try {
       await fs.access(filePath);
-    } catch (error) {
+    } catch {
       await fs.writeFile(filePath, '');
     }
   }
