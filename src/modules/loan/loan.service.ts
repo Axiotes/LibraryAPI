@@ -149,7 +149,10 @@ export class LoanService {
 
     for (const key in queryParams) {
       const func = verifyQueryParams[key];
-      func ? func() : '';
+
+      if (func) {
+        func();
+      }
     }
 
     query

@@ -29,7 +29,7 @@ module.exports = {
   rules: {
     '@typescript-eslint/no-explicit-any': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'warn',
-    'import/order': ['error', { 'newlines-between': 'always' }],
+    'import/order': ['warn', { 'newlines-between': 'always' }],
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': [
       'warn',

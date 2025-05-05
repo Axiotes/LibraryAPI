@@ -32,7 +32,7 @@ export class BookService {
     return book;
   }
 
-  public async find(queryParams: FindBookDto) {
+  public async find(queryParams: FindBookDto): Promise<Book[]> {
     if (
       (queryParams.firstDate && !queryParams.lastDate) ||
       (!queryParams.firstDate && queryParams.lastDate)
@@ -69,7 +69,10 @@ export class BookService {
 
     for (const key in queryParams) {
       const func = verifyQueryParams[key];
-      func ? func() : '';
+
+      if (func) {
+        func();
+      }
     }
 
     query

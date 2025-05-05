@@ -1,4 +1,5 @@
-import { SetMetadata } from '@nestjs/common';
+import { CustomDecorator, SetMetadata, Type } from '@nestjs/common';
 
-export const SkipValidated = (entity: Function) =>
-  SetMetadata('skip_entity', entity);
+export const SkipValidated = <T extends object>(
+  entity: Type<T>,
+): CustomDecorator<string> => SetMetadata('skip_entity', entity);
