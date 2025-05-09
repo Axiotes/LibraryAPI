@@ -79,6 +79,12 @@
       "ts"
     ],
     "rootDir": "src",
+    "moduleNameMapper": {
+      "^@lib-api/(.*)$": "<rootDir>/$1",
+      "^@lib-modules/(.*)$": "<rootDir>/modules/$1",
+      "^@lib-common/(.*)$": "<rootDir>/common/$1",
+      "^@lib-db/(.*)$": "<rootDir>/db/$1"
+    },
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"

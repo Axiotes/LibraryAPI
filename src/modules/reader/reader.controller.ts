@@ -101,8 +101,14 @@ export class ReaderController {
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
   @Get('cpf/:cpf')
-  public async findByCPF(@Param('cpf') cpf: string): Promise<Reader> {
-    return this.readerService.findBy<'cpf'>('cpf', cpf);
+  public async findByCPF(
+    @Param('cpf') cpf: string,
+  ): Promise<ApiResponse<Reader>> {
+    const reader = await this.readerService.findBy<'cpf'>('cpf', cpf);
+
+    return {
+      data: reader,
+    };
   }
 
   @ApiBearerAuth()
