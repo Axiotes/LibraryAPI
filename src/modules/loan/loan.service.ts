@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { throwError } from 'rxjs';
 
 import { ReaderService } from '../reader/reader.service';
 import { BookService } from '../book/book.service';
@@ -93,7 +92,7 @@ export class LoanService {
       return newLoans;
     } catch (err) {
       await queryRunner.rollbackTransaction();
-      throwError(() => err);
+      throw err;
     } finally {
       await queryRunner.release();
     }
