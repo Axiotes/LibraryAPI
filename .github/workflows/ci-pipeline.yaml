@@ -1,0 +1,64 @@
+name: Continuos Integration
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  eslint-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with: 
+          node-version: "20"
+      
+      - Install dependencies:
+        run: npm install
+
+      - Run ESLint:
+        run: npm run lint
+
+  build-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with: 
+          node-version: "20"
+      
+      - Install dependencies:
+        run: npm install
+
+      - Run Build:
+        run: npm run build
+
+  unit-tests-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with: 
+          node-version: "20"
+      
+      - Install dependencies:
+        run: npm install
+
+      - Run Unit Tests:
+        run: npm test
