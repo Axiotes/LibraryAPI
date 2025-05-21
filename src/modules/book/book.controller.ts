@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
 
 import { UpdateBookDto } from './dtos/update-book.dto';
 import { FindBookDto } from './dtos/find-book.dto';
@@ -40,6 +41,12 @@ export class BookController {
   })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
+  @Throttle({
+    default: {
+      limit: 10,
+      ttl: 60000,
+    },
+  })
   @Post()
   public async create(@Body() body: BookDto): Promise<ApiResponse<Book>> {
     const book = await this.bookService.create(body);
@@ -52,6 +59,12 @@ export class BookController {
   @ApiOperation({
     summary: 'Busca e retorna livro com base no ID',
     description: 'Qualquer usuário pode utilizar este endpoint',
+  })
+  @Throttle({
+    default: {
+      limit: 60,
+      ttl: 60000,
+    },
   })
   @Get(':id')
   public async findOne(
@@ -69,6 +82,12 @@ export class BookController {
     description: `Qualquer usuário pode utilizar este endpoint. 
     Caso deseje utilizar o query param "skip", é necessário utiliza-lo em conjunto com o "limit". 
     Para os query params de data publicação também é necessário utiliza-los em conjunto`,
+  })
+  @Throttle({
+    default: {
+      limit: 60,
+      ttl: 60000,
+    },
   })
   @Get()
   public async find(@Query() query: FindBookDto): Promise<ApiResponse<Book[]>> {
@@ -92,6 +111,12 @@ export class BookController {
   })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
+  @Throttle({
+    default: {
+      limit: 10,
+      ttl: 60000,
+    },
+  })
   @Patch(':id')
   public async update(
     @Param('id', ParseIntPipe) id: number,
@@ -112,6 +137,12 @@ export class BookController {
   })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin')
+  @Throttle({
+    default: {
+      limit: 10,
+      ttl: 60000,
+    },
+  })
   @Delete(':id')
   public async delete(
     @Param('id', ParseIntPipe) id: number,

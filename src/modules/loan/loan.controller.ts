@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
 
 import { Book } from '../book/book.entity';
 
@@ -41,6 +42,12 @@ export class LoanController {
   })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
+  @Throttle({
+    default: {
+      limit: 15,
+      ttl: 60000,
+    },
+  })
   @Post('')
   public async create(@Body() body: LoanDto): Promise<ApiResponse<Loan[]>> {
     const loans = await this.loanService.create(body);
@@ -53,6 +60,12 @@ export class LoanController {
   @ApiOperation({
     summary: 'Buscar e retornar os 5 livros com mais empréstimos',
     description: 'Qualquer usuário pode utlizar este endpoint',
+  })
+  @Throttle({
+    default: {
+      limit: 60,
+      ttl: 60000,
+    },
   })
   @Get('top-five-books')
   public async popularBooks(): Promise<ApiResponse<Loan[]>> {
@@ -72,6 +85,12 @@ export class LoanController {
     em que será retornado os empréstimos realizado entre a data inicial e a final do tipo de data selecionado 
     (loanDate: Data do empréstimos, limitReturnDate: Data limite para devolução, returnedDate: Data de devolução)`,
   })
+  @Throttle({
+    default: {
+      limit: 60,
+      ttl: 60000,
+    },
+  })
   @Get('')
   public async find(@Query() query: FindLoanDto): Promise<ApiResponse<Loan[]>> {
     const loans = await this.loanService.find(query);
@@ -90,6 +109,12 @@ export class LoanController {
     summary: 'Buscar e retornar livros com base no ID',
     description: 'Qualquer usuário pode utlizar este endpoint',
   })
+  @Throttle({
+    default: {
+      limit: 60,
+      ttl: 60000,
+    },
+  })
   @Get(':id')
   public async findOne(
     @Param('id', ParseIntPipe) id: number,
@@ -104,6 +129,12 @@ export class LoanController {
   @ApiOperation({
     summary: 'Buscar e retornar disponibilidade do livro',
     description: 'Qualquer usuário pode utlizar este endpoint',
+  })
+  @Throttle({
+    default: {
+      limit: 100,
+      ttl: 60000,
+    },
   })
   @Get('book/:bookId')
   public async bookAvailabilty(
@@ -124,6 +155,12 @@ export class LoanController {
   })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
+  @Throttle({
+    default: {
+      limit: 15,
+      ttl: 60000,
+    },
+  })
   @Patch(':id')
   public async returnBook(
     @Param('id', ParseIntPipe) id: number,
@@ -143,6 +180,12 @@ export class LoanController {
   })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin')
+  @Throttle({
+    default: {
+      limit: 5,
+      ttl: 60000,
+    },
+  })
   @Delete(':id')
   public async delete(
     @Param('id', ParseIntPipe) id: number,

@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
 
 import { FindReadersDto } from './dtos/find-readers.dto';
 import { UpdateReaderDto } from './dtos/update-reader.dto';
@@ -40,6 +41,12 @@ export class ReaderController {
   })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
+  @Throttle({
+    default: {
+      limit: 10,
+      ttl: 60000,
+    },
+  })
   @Post()
   public async create(@Body() body: ReaderDto): Promise<ApiResponse<Reader>> {
     const reader = await this.readerService.create(body);
@@ -57,6 +64,12 @@ export class ReaderController {
   })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
+  @Throttle({
+    default: {
+      limit: 40,
+      ttl: 60000,
+    },
+  })
   @Get()
   public async findAll(
     @Query() query: FindReadersDto,
@@ -81,6 +94,12 @@ export class ReaderController {
   })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
+  @Throttle({
+    default: {
+      limit: 40,
+      ttl: 60000,
+    },
+  })
   @Get('id/:id')
   public async findById(
     @Param('id', ParseIntPipe) id: number,
@@ -100,6 +119,12 @@ export class ReaderController {
   })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
+  @Throttle({
+    default: {
+      limit: 40,
+      ttl: 60000,
+    },
+  })
   @Get('cpf/:cpf')
   public async findByCPF(
     @Param('cpf') cpf: string,
@@ -119,6 +144,12 @@ export class ReaderController {
   })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
+  @Throttle({
+    default: {
+      limit: 10,
+      ttl: 60000,
+    },
+  })
   @Patch(':id')
   public async update(
     @Param('id', ParseIntPipe) id: number,
@@ -139,6 +170,12 @@ export class ReaderController {
   })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin')
+  @Throttle({
+    default: {
+      limit: 10,
+      ttl: 60000,
+    },
+  })
   @Delete(':id')
   public async delete(
     @Param('id', ParseIntPipe) id: number,
