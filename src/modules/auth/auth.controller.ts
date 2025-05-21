@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
 
 import { UpdateAuthDto } from './dtos/update-auth.dto';
 import { SignInDto } from './dtos/sign-in.dto';
@@ -39,6 +40,12 @@ export class AuthController {
   })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin')
+  @Throttle({
+    default: {
+      limit: 10,
+      ttl: 60000,
+    },
+  })
   @Post('sign-up')
   public async create(
     @Body() body: AuthDto,
@@ -53,6 +60,12 @@ export class AuthController {
   @ApiOperation({
     summary: 'Realizar login e obter token de autenticação',
     description: 'Qualquer usuário pode realizar essa ação',
+  })
+  @Throttle({
+    default: {
+      limit: 5,
+      ttl: 60000,
+    },
   })
   @Post('sign-in')
   public async signIn(
@@ -73,6 +86,12 @@ export class AuthController {
   })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin')
+  @Throttle({
+    default: {
+      limit: 20,
+      ttl: 60000,
+    },
+  })
   @Get(':id')
   public async findOne(
     @Param('id', ParseIntPipe) id: number,
@@ -92,6 +111,12 @@ export class AuthController {
   })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin')
+  @Throttle({
+    default: {
+      limit: 20,
+      ttl: 60000,
+    },
+  })
   @Get()
   public async find(): Promise<ApiResponse<Auth[]>> {
     const auths = await this.authService.find();
@@ -109,6 +134,12 @@ export class AuthController {
   })
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Roles('admin', 'employee')
+  @Throttle({
+    default: {
+      limit: 10,
+      ttl: 60000,
+    },
+  })
   @Patch()
   public async update(@Body() body: UpdateAuthDto): Promise<ApiResponse<Auth>> {
     const auth = await this.authService.update(body);
