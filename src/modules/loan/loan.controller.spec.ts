@@ -187,4 +187,40 @@ describe('LoanController', () => {
     expect(service.delete).toHaveBeenCalledWith(id);
     expect(result).toEqual({ data: 'Empréstimo deletado' });
   });
+
+  it('should check pending reader succesfully', async () => {
+    const readerId = 1;
+    const today = new Date();
+
+    const firstLoan = new Loan();
+    firstLoan.limitReturnDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() + 5,
+    );
+    firstLoan.fine = 0;
+    const secondLoan = new Loan();
+    secondLoan.limitReturnDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() - 5,
+    );
+    secondLoan.fine = 5;
+
+    const loans: Loan[] = [firstLoan, secondLoan];
+
+    service.pending = jest.fn().mockResolvedValueOnce({
+      loans,
+      totalFines: firstLoan.fine + secondLoan.fine,
+    });
+
+    const result = await controller.pending(readerId);
+
+    expect(result).toEqual({
+      data: {
+        loans,
+        totalFines: firstLoan.fine + secondLoan.fine,
+      },
+    });
+  });
 });
