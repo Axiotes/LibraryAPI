@@ -171,6 +171,8 @@ export class LoanService {
       throw new ConflictException('O livro do empréstimo já foi devolvido');
     }
 
+    loan.fine = await this.calculateFine(loanId);
+
     const returnedLoan = await this.loanRepository.preload({
       ...loan,
       returnedDate: new Date(),

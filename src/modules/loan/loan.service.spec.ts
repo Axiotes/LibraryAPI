@@ -344,8 +344,10 @@ describe('LoanService', () => {
     const loan = new Loan();
     loan.id = loanId;
     loan.returned = false;
+    loan.fine = 0;
 
     service.findOne = jest.fn().mockResolvedValueOnce(loan);
+    service['calculateFine'] = jest.fn().mockResolvedValueOnce(loan.fine);
 
     const returnedLoan = {
       ...loan,
