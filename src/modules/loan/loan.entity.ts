@@ -20,6 +20,9 @@ export class Loan {
   @Column()
   returned: boolean;
 
+  @Column({ nullable: true })
+  fine: number;
+
   @ManyToOne(() => Reader, (reader) => reader.id, { onDelete: 'CASCADE' })
   reader: Reader;
 

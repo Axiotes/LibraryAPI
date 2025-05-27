@@ -210,4 +210,53 @@ export class LoanService {
 
     return { book: book, available: book.stock - loans.length };
   }
+
+  public async pending(
+    readerId: number,
+  ): Promise<{ loans: Loan[]; totalFines: number }> {
+    const loans = await this.loanRepository.find({
+      where: { reader: { id: readerId }, returned: false },
+      relations: ['book'],
+    });
+
+    if (loans.length === 0) {
+      throw new NotFoundException('Nenhum empréstimo pendente encontrado');
+    }
+
+    let totalFines = 0;
+
+    const finePromises = loans.map(async (loan) => {
+      const fine = await this.calculateFine(loan.id);
+
+      totalFines += fine;
+
+      return { ...loan, fine };
+    });
+    const loansWithFines = await Promise.all(finePromises);
+
+    return { loans: loansWithFines, totalFines };
+  }
+
+  private async calculateFine(id: number): Promise<number> {
+    const loan = await this.loanRepository.findOne({ where: { id } });
+
+    if (!loan) {
+      throw new NotFoundException('Empréstimo não encontrado');
+    }
+
+    if (loan.returned) {
+      throw new ConflictException('O livro já foi devolvido');
+    }
+
+    const today = new Date();
+    const limitReturnDate = new Date(loan.limitReturnDate);
+
+    const timeDiff = today.getTime() - limitReturnDate.getTime();
+
+    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+    const fine = days > 0 ? days : 0;
+
+    return fine;
+  }
 }
