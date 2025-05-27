@@ -344,8 +344,10 @@ describe('LoanService', () => {
     const loan = new Loan();
     loan.id = loanId;
     loan.returned = false;
+    loan.fine = 0;
 
     service.findOne = jest.fn().mockResolvedValueOnce(loan);
+    service['calculateFine'] = jest.fn().mockResolvedValueOnce(loan.fine);
 
     const returnedLoan = {
       ...loan,
@@ -438,5 +440,50 @@ describe('LoanService', () => {
     expect(loanRepository.find).toHaveBeenCalledWith({
       where: { book, returned: false },
     });
+  });
+
+  it('should check pending reader succesfully', async () => {
+    const readerId = 1;
+    const today = new Date();
+
+    const firstLoan = new Loan();
+    firstLoan.limitReturnDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() + 5,
+    );
+    firstLoan.fine = 0;
+    const secondLoan = new Loan();
+    secondLoan.limitReturnDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() - 5,
+    );
+    secondLoan.fine = 5;
+
+    const loans: Loan[] = [firstLoan, secondLoan];
+
+    loanRepository.find.mockResolvedValue(loans);
+    service['calculateFine'] = jest
+      .fn()
+      .mockResolvedValueOnce(firstLoan.fine)
+      .mockResolvedValueOnce(secondLoan.fine);
+
+    const result = await service.pending(readerId);
+
+    expect(result).toEqual({
+      loans,
+      totalFines: firstLoan.fine + secondLoan.fine,
+    });
+  });
+
+  it('should throw a NotFoundException if no loan found', async () => {
+    const readerId = 1;
+
+    loanRepository.find.mockResolvedValueOnce([]);
+
+    await expect(service.pending(readerId)).rejects.toThrow(
+      new NotFoundException('Nenhum empréstimo pendente encontrado'),
+    );
   });
 });

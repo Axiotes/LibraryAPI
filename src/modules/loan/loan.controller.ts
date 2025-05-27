@@ -77,6 +77,31 @@ export class LoanController {
     };
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Buscar e retornar empréstimos pendentes de um leitor',
+    description:
+      'Apenas usuários com token jwt e cargos "admin" ou "employee" podem utilizar este endpoint',
+  })
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
+  @Roles('admin', 'employee')
+  @Throttle({
+    default: {
+      limit: 15,
+      ttl: 60000,
+    },
+  })
+  @Get('pending/:readerId')
+  public async pending(
+    @Param('readerId', ParseIntPipe) id: number,
+  ): Promise<ApiResponse<{ loans: Loan[]; totalFines: number }>> {
+    const loans = await this.loanService.pending(id);
+
+    return {
+      data: loans,
+    };
+  }
+
   @ApiOperation({
     summary: 'Buscar e retornar livros',
     description: `Qualquer usuário pode utilizar este endpoint. 
