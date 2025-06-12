@@ -54,7 +54,7 @@ docker-compose up
 
 ## Scripts Importantes
 ### Seeds
-Criação do usuário admin base definido .env
+Criação do usuário admin base definido no `.env`
 ```bash
 npm run seed
 ```
